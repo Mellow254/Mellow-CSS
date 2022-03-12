@@ -1,0 +1,64 @@
+@use 'sass:list';
+
+// Generates the color variables with different shades of a color
+@mixin generate-color-variables($themed-colors) {
+    @each $color, $shades in $themed-colors {
+        --dark-#{$color}: #{list.nth($shades, 1)};
+        --#{$color}: #{list.nth($shades, 2)};
+        --light-#{$color}: #{list.nth($shades, 3)};
+        --on-#{$color}: #{list.nth($shades, 4)};
+    }
+}
+
+// Sets the colors for the current theme
+@mixin set-themed-colors($colors, $theme) {
+    @each $theme-name, $themed-colors in $colors {
+        @if $theme-name == $theme {
+            :root,
+            .#{$theme-name} {
+                @include generate-color-variables($themed-colors);
+            }
+        } @else {
+            .#{$theme-name} {
+                @include generate-color-variables($themed-colors);
+            }
+        }
+    }
+}
+
+// Color setters
+@mixin color-setters($setters, $colornames) {
+    @each $setter-option in $setters {
+        @each $color in $colornames {
+            .#{$setter-option}-#{$color} {
+                --dark-#{$setter-option}: var(--dark-#{$color});
+                --#{$setter-option}: var(--#{$color});
+                --light-#{$setter-option}: var(--light-#{$color});
+                --on-#{$setter-option}: var(--on-#{$color});
+            }
+        }
+    }
+}
+
+// Color getters
+@mixin color-getters($getters, $shades, $setters) {
+    @each $getter, $value in $getters {
+        @each $shade in $shades {
+            @each $setter in $setters {
+                @if $shade == base {
+                    .#{$getter}-#{$setter} {
+                        #{$value}: var(--#{$setter});
+                    }
+                } @else if $shade == trans {
+                    .#{$getter}-on-#{$setter} {
+                        #{$value}: var(--on-#{$setter});
+                    }
+                } @else {
+                    .#{$getter}-#{$shade}-#{$setter} {
+                        #{$value}: var(--#{$shade}-#{$setter});
+                    }
+                }
+            }
+        }
+    }
+}

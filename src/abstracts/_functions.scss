@@ -1,0 +1,13 @@
+@use 'sass:list';
+@use 'sass:map';
+
+// Retrieves the color names from the color map
+@function get-colornames-from-map($colors, $theme) {
+    $keys-list: ();
+
+    @each $key, $shades in map.get($colors, $theme) {
+        $keys-list: list.append($keys-list, $key);
+    }
+
+    @return $keys-list;
+}

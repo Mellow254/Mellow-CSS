@@ -1,0 +1,15 @@
+@use 'abstracts' as *;
+@use 'defaults' as *;
+
+@mixin main(
+    $colors: $default-colors,
+    $shades: $default-shades,
+    $theme: $default-theme,
+    $setters: $default-setters,
+    $getters: $default-getters
+) {
+    @include set-themed-colors($colors, $theme);
+    @include color-setters($setters, get-colornames-from-map($colors, $theme));
+    @include color-getters($getters, $shades, $setters);
+}
+@include main;

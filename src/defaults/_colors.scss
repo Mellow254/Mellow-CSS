@@ -1,0 +1,32 @@
+$colors: (
+    light: (
+        'primary': [ '#69789e',
+        '#76879',
+        '#9ec6e9',
+        '#f3f1e9',
+        '#f3f1e9' ],
+        'secondary': [ '#69789e',
+        '#76879',
+        '#9ec6e9',
+        '#f3f1e9',
+        '#f3f1e9' ],
+    ),
+    dark: (
+        'primary': [ '#69789e',
+        '#76879',
+        '#9ec6e9',
+        '#f3f1e9',
+        '#f3f1e9' ],
+        'secondary': [ '#69789e',
+        '#76879',
+        '#9ec6e9',
+        '#f3f1e9',
+        '#f3f1e9' ],
+    ),
+);
+$shades: (dark, base, light, trans);
+$setters: (x, y);
+$getters: (
+    c: 'color',
+    b: 'background',
+);
