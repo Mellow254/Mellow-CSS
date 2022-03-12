@@ -1,0 +1,24 @@
+{
+  "name": "mellow-scss",
+  "version": "1.0.1",
+  "description": "",
+  "main": "src/main.scss",
+  "scripts": {
+    "build:sass": "sass --watch src:dist/css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mellow254/Mellow-CSS.git"
+  },
+  "keywords": [],
+  "author": "James Macharia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mellow254/Mellow-CSS/issues"
+  },
+  "homepage": "https://github.com/Mellow254/Mellow-CSS#readme",
+  "devDependencies": {
+    "sass": "^1.49.9",
+    "stylelint-config-standard-scss": "^3.0.0"
+  }
+}
