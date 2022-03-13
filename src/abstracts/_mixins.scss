@@ -1,4 +1,6 @@
 @use 'sass:list';
+@use 'sass:map';
+@use 'sass:string';
 
 // Generates the color variables with different shades of a color
 @mixin generate-color-variables($themed-colors) {
@@ -57,6 +59,83 @@
                     .#{$getter}-#{$shade}-#{$setter} {
                         #{$value}: var(--#{$shade}-#{$setter});
                     }
+                }
+            }
+        }
+    }
+}
+
+$descriptors-keys: (
+    1: 'font-family',
+    2: 'font-weight',
+    3: 'font-style',
+);
+
+@mixin generate-font-face($font-file) {
+    $start-at: string.index($font-file, 'fonts/') + string.length('fonts/');
+    $file: string.slice($font-file, $start-at, $end-at: -1);
+
+    // Generate font-face descriptors
+    $descriptors: (
+        font-style: normal,
+        font-weight: 400,
+    );
+    $slice-start-index: 1;
+    $descriptor-index: 1;
+    @for $i from 1 through string.length($file) {
+        $current-char: string.slice($file, $i, $i);
+
+        @if $current-char == '-' or $current-char == '.' {
+            $value: string.slice($file, $slice-start-index, $i - 1);
+            $descriptors: map.set(
+                $descriptors,
+                map.get($descriptors-keys, $descriptor-index),
+                $value
+            );
+            $descriptor-index: $descriptor-index + 1;
+            $slice-start-index: $i + 1;
+        }
+    }
+
+    // generate font-face from descriptors
+    @font-face {
+        font-family: map.get($descriptors, 'font-family');
+        src: url(string.quote(#{$font-file})) format('woff'),
+            url(string.quote(#{$font-file}2)) format('woff2');
+        font-style: string.unquote(map.get($descriptors, 'font-style'));
+        font-weight: string.unquote(map.get($descriptors, 'font-weight'));
+    }
+}
+
+// Generate fonts
+@mixin generate-fonts($fonts) {
+    @if $fonts {
+        $hosted-fonts: map.get($fonts, hosted);
+        $custom-fonts: map.get($fonts, custom);
+
+        @if $hosted-fonts {
+            @each $hosted-font, $url in $hosted-fonts {
+                @import url($url);
+            }
+
+            body {
+                font-family: map.keys($hosted-fonts), sans-serif;
+            }
+        } @else {
+            @if $custom-fonts {
+                $first-font: list.nth($custom-fonts, 1);
+
+                body {
+                    font-family: string.slice(
+                            $first-font,
+                            string.index($first-font, 'fonts/') +
+                                string.length('fonts/'),
+                            string.index($first-font, '-') - 1
+                        ),
+                        sans-serif;
+                }
+                @each $font-file in $custom-fonts {
+                    @include generate-font-face($font-file);
                 }
             }
         }

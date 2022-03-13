@@ -6,10 +6,13 @@
     $shades: $default-shades,
     $theme: $default-theme,
     $setters: $default-setters,
-    $getters: $default-getters
+    $getters: $default-getters,
+    $fonts: null
 ) {
+    // Colors
     @include set-themed-colors($colors, $theme);
     @include color-setters($setters, get-colornames-from-map($colors, $theme));
     @include color-getters($getters, $shades, $setters);
+    @include generate-fonts($fonts);
 }
-// @include main;
+@include main;

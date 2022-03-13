@@ -6,7 +6,8 @@
   "scripts": {
     "build:sass": "sass --watch src:dist/css",
     "prettier": "prettier --write \"src/**/*.scss\"",
-    "stylelint": "stylelint \"src/**/*.scss\" --fix"
+    "stylelint": "stylelint \"src/**/*.scss\" --fix",
+    "lint:fix": "npm run prettier && npm run stylelint"
   },
   "repository": {
     "type": "git",
