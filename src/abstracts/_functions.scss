@@ -1,5 +1,6 @@
 @use 'sass:list';
 @use 'sass:map';
+@use 'sass:string';
 
 // Retrieves the color names from the color map
 @function get-colornames-from-map($colors, $theme) {
@@ -10,4 +11,24 @@
     }
 
     @return $keys-list;
+}
+
+// Globally Replaces a string with another string
+@function replace-string($string, $search, $replace: '') {
+    $quoted-string: string.quote(#{$string});
+    $end-index: string.index($quoted-string, $search);
+
+    @if $end-index {
+        @return string.slice($quoted-string, 1, $end-index - 1) + $replace +
+            replace-string(
+                string.slice(
+                    $quoted-string,
+                    $end-index + string.length($search)
+                ),
+                $search,
+                $replace
+            );
+    }
+
+    @return $string;
 }

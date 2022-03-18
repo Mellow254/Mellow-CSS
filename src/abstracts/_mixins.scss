@@ -2,6 +2,8 @@
 @use 'sass:map';
 @use 'sass:string';
 
+@use 'functions';
+
 // Generates the color variables with different shades of a color
 @mixin generate-color-variables($themed-colors) {
     @each $color, $shades in $themed-colors {
@@ -136,6 +138,53 @@ $descriptors-keys: (
                 }
                 @each $font-file in $custom-fonts {
                     @include generate-font-face($font-file);
+                }
+            }
+        }
+    }
+}
+
+// Flexbox
+@mixin generate-flexbox($properties) {
+    @each $property-type, $property-map in $properties {
+        @if $property-type == single {
+            @each $property, $values in $property-map {
+                @each $value in $values {
+                    $res: functions.replace-string($value, ' ', '-');
+                    .#{$property}-#{$res} {
+                        #{$property}: $value;
+                    }
+                }
+            }
+        } @else if $property-type == overflows {
+            $overflow-options: (safe, unsafe);
+            @each $property in $property-map {
+                $values: map.get(map.get($properties, single), $property);
+                @each $value in $values {
+                    $res: functions.replace-string($value, ' ', '-');
+                    @each $overflow-option in $overflow-options {
+                        .#{$overflow-option}-#{$property}-#{$res} {
+                            #{$property}: $overflow-option $value;
+                        }
+                    }
+                }
+            }
+        } @else {
+            @each $property, $constituent-properties in $property-map {
+                $prefixes: map.get(
+                    map.get($properties, single),
+                    map.get($constituent-properties, prefix)
+                );
+                $suffixes: map.get(
+                    map.get($properties, single),
+                    map.get($constituent-properties, suffix)
+                );
+                @each $prefix in $prefixes {
+                    @each $suffix in $suffixes {
+                        .#{$property}-#{$prefix}-#{$suffix} {
+                            #{$property}: $prefix $suffix;
+                        }
+                    }
                 }
             }
         }

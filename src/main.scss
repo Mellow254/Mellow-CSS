@@ -7,12 +7,18 @@
     $theme: $default-theme,
     $setters: $default-setters,
     $getters: $default-getters,
+    $flexbox: $default-flex-box-properties,
     $fonts: null
 ) {
+    // Fonts
+    @include generate-fonts($fonts);
+
     // Colors
     @include set-themed-colors($colors, $theme);
     @include color-setters($setters, get-colornames-from-map($colors, $theme));
     @include color-getters($getters, $shades, $setters);
-    @include generate-fonts($fonts);
+
+    // flexbox
+    @include generate-flexbox($default-flex-box-properties);
 }
 @include main;
