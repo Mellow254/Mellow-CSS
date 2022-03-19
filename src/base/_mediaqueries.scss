@@ -1,3 +1,7 @@
+@use 'sass:map';
+
+@use '../defaults';
+
 /*
     Media query definition
 */
@@ -8,21 +12,6 @@
     }
 }
 
-/*
-    type: loop - generates all the media queries depending on the screnn sizes
-    type: single - generates a single media query depending on the passed width
-*/
-
-@mixin generate-media-queries(
-    $breakpoints,
-    $type: single,
-    $default-breakpoint: xs
-) {
-    @if $type == loop {
-        @each $key, $value in $breakpoints {
-            @include media-query($breakpoints, $key);
-        }
-    } @else {
-        @include media-query($breakpoints, $default-breakpoint);
-    }
+@mixin min-width($default-breakpoint: xs, $breakpoints: defaults.$breakpoints) {
+    @include media-query(map.get($breakpoints, $key));
 }
