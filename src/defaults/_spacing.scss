@@ -1,0 +1,16 @@
+$setters: (a, b, u, v);
+$getters: (
+    p: 'padding',
+    pb: 'padding-bottom',
+    pt: 'padding-top',
+    pl: 'padding-left',
+    pr: 'padding-right',
+    m: 'margin',
+    mb: 'margin-bottom',
+    mt: 'margin-top',
+    ml: 'margin-left',
+    mr: 'margin-right',
+    gp: 'gap',
+    rg: 'row-gap',
+    cg: 'column-gap',
+);

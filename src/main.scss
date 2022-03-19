@@ -1,24 +1,76 @@
 @use 'abstracts' as *;
 @use 'defaults' as *;
+@use 'base' as *;
 
 @mixin main(
-    $colors: $default-colors,
-    $shades: $default-shades,
+    $colors: $default-color-options,
+    $shades: $default-color-shades,
     $theme: $default-theme,
-    $setters: $default-setters,
-    $getters: $default-getters,
+    $color-setters: $default-color-setters,
+    $color-getters: $default-color-getters,
     $flexbox: $default-flex-box-properties,
+    $spacing-setters: $default-spacing-setters,
+    $spacing-getters: $default-spacing-getters,
+    $mq-breakpoints: $default-breakpoints,
     $fonts: null
 ) {
-    // Fonts
+    /* Fonts */
     @include generate-fonts($fonts);
 
-    // Colors
+    /* Colors */
     @include set-themed-colors($colors, $theme);
-    @include color-setters($setters, get-colornames-from-map($colors, $theme));
-    @include color-getters($getters, $shades, $setters);
+    @include color-setters(
+        $color-setters,
+        get-colornames-from-map($colors, $theme)
+    );
+    @include color-getters($color-getters, $shades, $color-setters);
 
-    // flexbox
+    /* flexbox */
     @include generate-flexbox($default-flex-box-properties);
+
+    /**
+        Spacing variables without units
+    */
+    @include root-spacing-values(calculate-sizes-from-range());
+    @include generate-spacing-setter(
+        calculate-sizes-from-range(),
+        $spacing-setters
+    );
+
+    /* Responsive spacing setters */
+    @include generate-spacing-setter(
+        calculate-sizes-from-range(),
+        $spacing-setters,
+        $mq-breakpoints
+    );
+    @include spacing-getter($spacing-getters, $spacing-setters);
+
+    /*
+        Typography and layout static
+    */
+    @include generate-static-layout-typography($typography-static);
+    @include generate-static-layout-typography($layout-static);
+
+    /*
+        Responsive Typography and layout static
+    */
+    @include generate-static-layout-typography(
+        $typography-static,
+        $mq-breakpoints
+    );
+    @include generate-static-layout-typography($layout-static, $mq-breakpoints);
+
+    /* Typography related sizing */
+    @include generate-static-typography(
+        $typography-static-sizing,
+        calculate-sizes-from-range()
+    );
+
+    /* Responsive typography related sizing */
+    @include generate-static-typography(
+        $typography-static-sizing,
+        calculate-sizes-from-range(),
+        $mq-breakpoints
+    );
 }
 @include main;

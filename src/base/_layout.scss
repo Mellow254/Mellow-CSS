@@ -1,0 +1,33 @@
+$overflow-options: (scroll, visible, clip, hidden, auto);
+$static: (
+    visibility: (
+        class: visibility,
+        values: (
+            visible hidden collapse,
+        ),
+    ),
+    position: (
+        class: position,
+        values: (
+            absolute relative fixed sticky static,
+        ),
+    ),
+    overflow: (
+        class: overflow,
+        values: $overflow-options,
+    ),
+    overflow-x: (
+        class: overflow-x,
+        values: $overflow-options,
+    ),
+    overflow-y: (
+        class: overflow-y,
+        values: $overflow-options,
+    ),
+    z-index: (
+        class: z-index,
+        value: (
+            0 1,
+        ),
+    ),
+);

@@ -1,10 +1,16 @@
 @use 'sass:list';
 @use 'sass:map';
 @use 'sass:string';
+@use 'sass:math';
 
 @use 'functions';
+@use '../base';
 
-// Generates the color variables with different shades of a color
+/*
+
+Generates the color variables with different shades of a color
+
+*/
 @mixin generate-color-variables($themed-colors) {
     @each $color, $shades in $themed-colors {
         --dark-#{$color}: #{list.nth($shades, 1)};
@@ -14,7 +20,11 @@
     }
 }
 
-// Sets the colors for the current theme
+/*
+
+Sets the colors for the current theme
+
+*/
 @mixin set-themed-colors($colors, $theme) {
     @each $theme-name, $themed-colors in $colors {
         @if $theme-name == $theme {
@@ -30,7 +40,11 @@
     }
 }
 
-// Color setters
+/*
+
+Sets the colors for the current theme
+
+*/
 @mixin color-setters($setters, $colornames) {
     @each $setter-option in $setters {
         @each $color in $colornames {
@@ -44,7 +58,11 @@
     }
 }
 
-// Color getters
+/*
+
+Color getters
+
+*/
 @mixin color-getters($getters, $shades, $setters) {
     @each $getter, $value in $getters {
         @each $shade in $shades {
@@ -67,12 +85,23 @@
     }
 }
 
-$descriptors-keys: (
+$descriptor-keys: (
     1: 'font-family',
     2: 'font-weight',
     3: 'font-style',
 );
 
+/*
+
+Generates the
+@font-face {
+    font-family
+    font-weight
+    font-style
+    src
+} Structure
+
+*/
 @mixin generate-font-face($font-file) {
     $start-at: string.index($font-file, 'fonts/') + string.length('fonts/');
     $file: string.slice($font-file, $start-at, $end-at: -1);
@@ -91,7 +120,7 @@ $descriptors-keys: (
             $value: string.slice($file, $slice-start-index, $i - 1);
             $descriptors: map.set(
                 $descriptors,
-                map.get($descriptors-keys, $descriptor-index),
+                map.get($descriptor-keys, $descriptor-index),
                 $value
             );
             $descriptor-index: $descriptor-index + 1;
@@ -109,7 +138,11 @@ $descriptors-keys: (
     }
 }
 
-// Generate fonts
+/*
+
+Uses the Generate fonts fontface or remote link
+
+*/
 @mixin generate-fonts($fonts) {
     @if $fonts {
         $hosted-fonts: map.get($fonts, hosted);
@@ -144,7 +177,11 @@ $descriptors-keys: (
     }
 }
 
-// Flexbox
+/*
+
+Flexbox classes
+
+*/
 @mixin generate-flexbox($properties) {
     @each $property-type, $property-map in $properties {
         @if $property-type == single {
@@ -188,5 +225,132 @@ $descriptors-keys: (
                 }
             }
         }
+    }
+}
+
+/*
+
+    Flexible sizing custom properties not tied to any unit
+
+*/
+
+@mixin root-spacing-values($sizes) {
+    :root {
+        @for $i from 1 through list.length($sizes) {
+            $val: list.nth($sizes, $i);
+
+            --s-#{$i}: #{$val};
+        }
+    }
+}
+
+/*
+
+    Spacing setters -  Padding, Margin, Gap
+
+*/
+
+@mixin spacing-setter($sizes, $setters, $breakpoint: null) {
+    @each $size in $sizes {
+        $class-suffix: functions.replace-string($size, '.', '');
+        @if $breakpoint {
+            $class-suffix: #{$class-suffix}-#{$breakpoint};
+        }
+        @each $setter in $setters {
+            .#{$setter}-#{$class-suffix} {
+                --#{$setter}: #{$size}rem;
+            }
+        }
+    }
+}
+
+@mixin generate-spacing-setter($sizes, $setters, $breakpoints: null) {
+    @if $breakpoints {
+        @each $key, $value in $breakpoints {
+            @include base.media-query($value) {
+                @include spacing-setter($sizes, $setters, $key);
+            }
+        }
+    } @else {
+        @include spacing-setter($sizes, $setters);
+    }
+}
+
+/*
+
+    Spacing getters
+
+*/
+
+@mixin spacing-getter($getters, $setters) {
+    @each $getter, $value in $getters {
+        @each $setter in $setters {
+            .#{$getter} {
+                #{$value}: var(--#{$setter});
+            }
+        }
+    }
+}
+
+/*
+
+    Static layout and typography
+
+*/
+@mixin static-layout-typography($properties, $breakpoint: null) {
+    @each $property, $property-values in $properties {
+        $class: map.get($property-values, class);
+        $values: map.get($property-values, values);
+
+        @each $value in $values {
+            @if $breakpoint {
+                $value: #{$value}-#{$breakpoint};
+            }
+            .#{$class}-#{$value} {
+                #{$property}: $value;
+            }
+        }
+    }
+}
+
+@mixin generate-static-layout-typography($properties, $breakpoints: null) {
+    @if $breakpoints {
+        @each $key, $value in $breakpoints {
+            @include base.media-query($value) {
+                @include static-layout-typography($properties, $key);
+            }
+        }
+    } @else {
+        @include static-layout-typography($properties);
+    }
+}
+
+/*
+    Sizing typography
+*/
+
+@mixin static-typography($properties, $sizes, $breakpoint: null) {
+    @each $class, $value in $properties {
+        @each $size in $sizes {
+            $class-suffix: functions.replace-string($size, '.', '');
+            @if $breakpoint {
+                $class-suffix: #{$class-suffix}-#{$breakpoint};
+            }
+            .#{$class}-#{$class-suffix} {
+                #{$value}: #{$size}em;
+            }
+        }
+    }
+}
+
+@mixin generate-static-typography($properties, $sizes, $breakpoints: null) {
+    @if $breakpoints {
+        @each $key, $value in $breakpoints {
+            @include base.media-query($value) {
+                @include static-typography($properties, $sizes, $key);
+            }
+        }
+    } @else {
+        @include static-typography($properties, $sizes);
     }
 }

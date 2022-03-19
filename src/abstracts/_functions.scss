@@ -1,5 +1,6 @@
 @use 'sass:list';
 @use 'sass:map';
+@use 'sass:math';
 @use 'sass:string';
 
 // Retrieves the color names from the color map
@@ -31,4 +32,16 @@
     }
 
     @return $string;
+}
+
+@function calculate-sizes-from-range($start: 0.5, $end: 10, $scale: 0.5) {
+    $values: ($start);
+
+    @for $i from 1 through math.ceil($end) - 1 {
+        $prev-value: list.nth($values, $i);
+        $current-value: $prev-value + $scale;
+        $values: list.append($values, $current-value);
+    }
+
+    @return $values;
 }

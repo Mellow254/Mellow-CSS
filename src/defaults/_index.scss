@@ -1,4 +1,5 @@
-@forward 'colors' as default-*;
+@forward 'colors' as default-color-*;
+@forward 'spacing' as default-spacing-*;
 @forward 'theme' as default-*;
 @forward 'breakpoints' as default-*;
 @forward 'flexbox' as default-*;
