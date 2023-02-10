@@ -139,10 +139,9 @@ Generates the
 }
 
 /*
-
 Uses the Generate fonts fontface or remote link
-
 */
+
 @mixin generate-fonts($fonts) {
     @if $fonts {
         $hosted-fonts: map.get($fonts, hosted);

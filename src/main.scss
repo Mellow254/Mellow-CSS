@@ -19,13 +19,13 @@
 
     /* Colors */
     @include set-themed-colors($colors, $theme);
+
     // @debug $default-color-options;
-    @include color-setters($color-setters, get-colornames-from-map($colors, $theme));
-    @include color-getters(
-        $color-getters,
-        $shades,
-        $color-setters
+    @include color-setters(
+        $color-setters,
+        get-colornames-from-map($colors, $theme)
     );
+    @include color-getters($color-getters, $shades, $color-setters);
 
     /* flexbox */
     @include generate-flexbox($default-flex-box-properties);
@@ -34,7 +34,10 @@
         Spacing variables without units
     */
     @include root-spacing-values(calculate-sizes-from-range());
-    @include generate-spacing-setter(calculate-sizes-from-range(), $spacing-setters );
+    @include generate-spacing-setter(
+        calculate-sizes-from-range(),
+        $spacing-setters
+    );
 
     /* Responsive spacing setters */
     @include generate-spacing-setter(
@@ -53,12 +56,18 @@
     /*
         Responsive Typography and layout static
     */
-    @include generate-static-layout-typography($typography-static, $mq-breakpoints );
+    @include generate-static-layout-typography(
+        $typography-static,
+        $mq-breakpoints
+    );
 
     @include generate-static-layout-typography($layout-static, $mq-breakpoints);
 
     /* Typography related sizing */
-    @include generate-static-typography($typography-static-sizing, calculate-sizes-from-range());
+    @include generate-static-typography(
+        $typography-static-sizing,
+        calculate-sizes-from-range()
+    );
 
     /* Responsive typography related sizing */
     @include generate-static-typography(

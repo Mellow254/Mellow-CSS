@@ -1,31 +1,36 @@
 {
-  "name": "mellow-scss",
-  "version": "1.0.11",
-  "description": "",
-  "main": "src/main.scss",
-  "scripts": {
-    "build:sass": "sass --watch src:dist/css",
-    "prettier": "prettier --write \"src/**/*.scss\"",
-    "stylelint": "stylelint \"src/**/*.scss\" --fix",
-    "lint:fix": "npm run prettier && npm run stylelint"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Mellow254/Mellow-CSS.git"
-  },
-  "keywords": [],
-  "author": "James Macharia",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Mellow254/Mellow-CSS/issues"
-  },
-  "homepage": "https://github.com/Mellow254/Mellow-CSS#readme",
-  "devDependencies": {
-    "prettier": "2.5.1",
-    "sass": "^1.49.9",
-    "stylelint": "^14.5.3",
-    "stylelint-config-prettier": "^9.0.3",
-    "stylelint-config-standard": "^25.0.0",
-    "stylelint-config-standard-scss": "^3.0.0"
-  }
+    "name": "mellow-scss",
+    "version": "1.0.11",
+    "description": "",
+    "main": "src/main.scss",
+    "scripts": {
+        "build:sass": "sass --watch src:dist/css",
+        "prettier": "prettier --check \"src/**/*.scss\"",
+        "prettier:fix": "prettier --write \"src/**/*.scss\"",
+        "stylelint": "stylelint \"src/**/*.scss\"",
+        "stylelint:fix": "stylelint --fix \"src/**/*.scss\"",
+        "lint:fix": "npm run prettier:fix && npm run stylelint:fix",
+        "test": "npm run prettier && npm run stylelint",
+        "prepare": "husky install"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Mellow254/Mellow-CSS.git"
+    },
+    "keywords": [],
+    "author": "James Macharia",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Mellow254/Mellow-CSS/issues"
+    },
+    "homepage": "https://github.com/Mellow254/Mellow-CSS#readme",
+    "devDependencies": {
+        "lint-staged": "^13.1.1",
+        "prettier": "2.8.4",
+        "sass": "^1.58.0",
+        "stylelint": "^14.10.0",
+        "stylelint-config-prettier": "^9.0.4",
+        "stylelint-config-standard-scss": "^6.1.0",
+        "husky": "^8.0.0"
+    }
 }
