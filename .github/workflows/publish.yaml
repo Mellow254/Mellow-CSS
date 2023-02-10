@@ -13,22 +13,22 @@ jobs:
 
         steps:
             - name: Checkout
-            uses: actions/checkout@v3
+              uses: actions/checkout@v3
 
             - name: Setup .npmrc. Uses the NODE_AUTH_TOKEN
-            uses: actions/setup-node@v3
-            with:
-                node-version: 18
-                cache: npm
-                registry-url: 'https://registry.npmjs.org'
+              uses: actions/setup-node@v3
+              with:
+                    node-version: 18
+                    cache: npm
+                    registry-url: 'https://registry.npmjs.org'
 
             - name: Configure CI Git User
-            run: |
-                git config user.name "${{ github.actor }}"
-                git config user.email "${{ github.actor}}@users.noreply.github.com"
+              run: |
+                    git config user.name "${{ github.actor }}"
+                    git config user.email "${{ github.actor}}@users.noreply.github.com"
 
             - name: Install dependencies
-            run: npm install
+              run: npm install
 
             - name: Publish
-            run: npm publish
+              run: npm publish
