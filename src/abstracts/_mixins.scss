@@ -11,30 +11,28 @@
 Generates the color variables with different shades of a color
 
 */
-@mixin generate-color-variables($themed-colors) {
-    @each $color, $shades in $themed-colors {
-        --dark-#{$color}: #{list.nth($shades, 1)};
-        --#{$color}: #{list.nth($shades, 2)};
-        --light-#{$color}: #{list.nth($shades, 3)};
-        --on-#{$color}: #{list.nth($shades, 4)};
+@mixin generate-color-variables($colors) {
+    @each $color, $nuance in $colors {
+        --dark-#{$color}: #{list.nth($nuance, 1)};
+        --#{$color}: #{list.nth($nuance, 2)};
+        --light-#{$color}: #{list.nth($nuance, 3)};
+        --on-#{$color}: #{list.nth($nuance, 4)};
     }
 }
 
 /*
-
 Sets the colors for the current theme
-
 */
-@mixin set-themed-colors($colors, $theme) {
-    @each $theme-name, $themed-colors in $colors {
-        @if $theme-name == $theme {
+@mixin set-themed-colors($colors-map, $current-theme) {
+    @each $theme, $colors in $colors-map {
+        @if $theme == $current-theme {
             :root,
-            .#{$theme-name} {
-                @include generate-color-variables($themed-colors);
+            .#{$theme} {
+                @include generate-color-variables($colors);
             }
         } @else {
-            .#{$theme-name} {
-                @include generate-color-variables($themed-colors);
+            .#{$theme} {
+                @include generate-color-variables($colors);
             }
         }
     }
