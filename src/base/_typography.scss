@@ -1,32 +1,130 @@
-$static: (
-    text-align: (
-        class: text-align,
-        values: (
-            start end left right center justify justify-all match-parent,
-        ),
+$properties: (
+    font-weight: (
+        normal,
+        bold,
+        lighter,
+        bolder,
     ),
-    text-transform: (
-        class: text-transform,
-        values: (
-            none capitalize uppercase lowercase full-width full-size-kana,
-        ),
+    font-style: (
+        normal,
+        italic,
+        oblique,
+    ),
+    writing-mode: (
+        horizontal-tb,
+        vertical-rl,
+        vertical-lr,
+    ),
+    text-orientation: (
+        mixed,
+        upright,
+        sideways,
+        sideways-right,
+        use-glyph-orientation,
+    ),
+    list-style-position: (
+        inside,
+        outside,
     ),
     vertical-align: (
-        class: vertical-align,
-        values: (
-            baseline sub super text-top text-bottom middle top bottom,
-        ),
+        baseline,
+        sub,
+        super,
+        text-top,
+        text-bottom,
+        middle,
+        top,
+        bottom,
     ),
     white-space: (
-        class: white-space,
-        values: (
-            normal nowrap pre pre-wrap pre-lines break-spaces,
-        ),
+        normal,
+        nowrap,
+        pre,
+        pre-wrap,
+        pre-lines,
+        break-spaces,
+    ),
+    text-align: (
+        start,
+        end,
+        center,
+        right,
+        left,
+        justify,
+        justify-all,
+        match-parent,
+    ),
+    text-align-last: (
+        start,
+        end,
+        center,
+        right,
+        left,
+        justify,
+        auto,
+    ),
+    text-transform: (
+        capitalize,
+        uppercase,
+        lowercase,
+        none,
+    ),
+    text-decoration-line: (
+        none,
+        underline,
+        overline,
+        line-through,
+        blink,
+    ),
+    text-decoration-style: (
+        none,
+        solid,
+        dotted,
+        double,
+        wavy,
+        dashed,
+    ),
+    text-overflow: (
+        clip,
+        ellipsis,
+        fade,
+    ),
+    word-break: (
+        normal,
+        break-all,
+        keep-all,
+        break-word,
     ),
 );
-$static-sizing: (
-    fs: 'font-size',
-    ls: 'letter-spacing',
-    ws: 'word-spacing',
-    lh: 'line-height',
+
+$sized-properties-and-units: (
+    font-size: rem,
+    letter-spacing: px,
+    word-spacing: px,
+    line-height: '',
+);
+
+$classnames-map: (
+    // default rem
+    font-size: fs,
+    // px
+    letter-spacing: ls,
+    // px
+    word-spacing: ws,
+    // no unit. Multiplied by the element's own font-size
+    line-height: lh,
+    font-weight: fw,
+    font-style: fst,
+    writing-mode: wrt-mode,
+    text-orientation: txt-orientation,
+    list-style-position: lsp,
+    vertical-align: va,
+    white-space: wsp,
+    text-align: ta,
+    text-align-last: tal,
+    text-transform: tt,
+    text-decoration-line: tdl,
+    text-decoration-style: tds,
+    text-overflow: to,
+    word-break: wd
 );

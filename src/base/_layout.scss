@@ -1,33 +1,67 @@
 $overflow-options: (scroll, visible, clip, hidden, auto);
-$static: (
+$overscroll-behavior-options: (auto, contain, none);
+$properties: (
+    display: (
+        block,
+        inline,
+        inline-block,
+    ),
+    isolation: (
+        auto,
+        isolate,
+    ),
+    object-fit: (
+        contain,
+        cover,
+        fill,
+        none,
+        scale-down,
+    ),
     visibility: (
-        class: visibility,
-        values: (
-            visible hidden collapse,
-        ),
+        visible,
+        hidden,
+        collapse,
     ),
     position: (
-        class: position,
-        values: (
-            absolute relative fixed sticky static,
-        ),
+        absolute,
+        relative,
+        fixed,
+        sticky,
+        static,
     ),
-    overflow: (
-        class: overflow,
-        values: $overflow-options,
+    overflow: $overflow-options,
+    overflow-x: $overflow-options,
+    overflow-y: $overflow-options,
+    overflow-wrap: (
+        normal,
+        anywhere,
+        break-word,
     ),
-    overflow-x: (
-        class: overflow-x,
-        values: $overflow-options,
-    ),
-    overflow-y: (
-        class: overflow-y,
-        values: $overflow-options,
-    ),
+    overscroll-behavior: $overscroll-behavior-options,
+    overscroll-behavior-x: $overscroll-behavior-options,
+    overscroll-behavior-y: $overscroll-behavior-options,
     z-index: (
-        class: z-index,
-        value: (
-            0 1,
-        ),
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
     ),
+);
+
+$classnames-map: (
+    display: d,
+    isolation: iso,
+    object-fit: obj-f,
+    visibility: vis,
+    position: pos,
+    overflow: ovrf,
+    overflow-x: ovrf-x,
+    overflow-y: ovrf-y,
+    overflow-wrap: ovrf-wrap,
+    overscroll-behavior: ovrsc-b,
+    overscroll-behavior-x: ovrsc-b-x,
+    overscroll-behavior-y: ovrsc-b-y,
+    z-index: z-index,
 );

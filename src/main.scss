@@ -1,17 +1,22 @@
+@use 'sass:map';
+
 @use 'abstracts' as *;
 @use 'defaults' as *;
 @use 'base' as *;
 
 @mixin main(
     $colors: $default-color-options,
-    $shades: $default-color-shades,
     $theme: $default-theme,
     $color-setters: $default-color-setters,
     $color-getters: $default-color-getters,
-    $flexbox: $default-flex-box-properties,
+    $flexbox-classnames-map: $default-flexbox-classnames-map,
+    $spacing-determinants: $default-spacing-determinants,
     $spacing-setters: $default-spacing-setters,
     $spacing-getters: $default-spacing-getters,
-    $mq-breakpoints: $default-breakpoints,
+    $breakpoints: $default-breakpoints,
+    $layout-classnames-map: $layout-classnames-map,
+    $typography-classnames-map: $typography-classnames-map,
+    $typography-properties: $typography-sized-properties-and-units,
     $fonts: null
 ) {
     /* Fonts */
@@ -20,60 +25,66 @@
     /* Colors */
     @include set-themed-colors($colors, $theme);
 
-    // @debug $default-color-options;
-    @include color-setters(
+    @include set-colors-with-respective-custom-property(
         $color-setters,
         get-colornames-from-map($colors, $theme)
     );
-    @include color-getters($color-getters, $shades, $color-setters);
+    @include get-color-for-each-colorname-nuance-getter(
+        $color-getters,
+        $color-setters
+    );
 
     /* flexbox */
-    @include generate-flexbox($default-flex-box-properties);
-
+    @include generate-basic-flexbox-options($flexbox-classnames-map);
+    @include generate-flex-flow-options;
+    @include generate-options-for-overflow-flex-properties;
     /**
         Spacing variables without units
     */
-    @include root-spacing-values(calculate-sizes-from-range());
-    @include generate-spacing-setter(
-        calculate-sizes-from-range(),
-        $spacing-setters
-    );
+    $spacing-sizes-map: calculate-sizes-from-range($spacing-determinants);
+    @include root-spacing-values($spacing-sizes-map);
+    @include generate-spacing-setter($spacing-sizes-map, $spacing-setters);
 
     /* Responsive spacing setters */
     @include generate-spacing-setter(
-        calculate-sizes-from-range(),
+        $spacing-sizes-map,
         $spacing-setters,
-        $mq-breakpoints
+        $breakpoints
     );
-    @include spacing-getter($spacing-getters, $spacing-setters);
+    @include generate-spacing-getter($spacing-getters, $spacing-setters);
 
     /*
-        Typography and layout static
+        Static Layout classes
     */
-    @include generate-static-layout-typography($typography-static);
-    @include generate-static-layout-typography($layout-static);
+    @include generate-static-layout-classes($layout-classnames-map);
+    @include generate-responsive-static-layout-classes(
+        $layout-classnames-map,
+        $breakpoints
+    );
 
     /*
-        Responsive Typography and layout static
+        Static Typography Classes
     */
-    @include generate-static-layout-typography(
-        $typography-static,
-        $mq-breakpoints
+    @include generate-static-typography-classes($typography-classnames-map);
+    @include generate-responsive-static-typography-classes(
+        $typography-classnames-map,
+        $breakpoints
     );
 
-    @include generate-static-layout-typography($layout-static, $mq-breakpoints);
-
-    /* Typography related sizing */
-    @include generate-static-typography(
-        $typography-static-sizing,
-        calculate-sizes-from-range()
+    /*
+        Sized typography classes from range
+    */
+    @include generate-typography-from-range-of-values(
+        $typography-properties,
+        $spacing-sizes-map,
+        $typography-classnames-map
     );
 
-    /* Responsive typography related sizing */
-    @include generate-static-typography(
-        $typography-static-sizing,
-        calculate-sizes-from-range(),
-        $mq-breakpoints
+    @include generate-responsive-typography-from-range-of-values(
+        $typography-properties,
+        $spacing-sizes-map,
+        $typography-classnames-map,
+        $breakpoints
     );
 }
 

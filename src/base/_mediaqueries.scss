@@ -12,6 +12,28 @@
     }
 }
 
-@mixin min-width($default-breakpoint: xs, $breakpoints: defaults.$breakpoints) {
-    @include media-query(map.get($breakpoints, $key));
+@mixin mq-min-width(
+    $default-breakpoint: xs,
+    $breakpoints: defaults.$breakpoints
+) {
+    @include media-query(map.get($breakpoints, $default-breakpoint));
+}
+
+@mixin mq-max-width(
+    $default-breakpoint: xs,
+    $breakpoints: defaults.$breakpoints
+) {
+    @media (max-width: map.get($breakpoints, $default-breakpoint)) {
+        @content;
+    }
+}
+
+@mixin mq-range(
+    $minbreakpoint,
+    $maxbreakpoint,
+    $breakpoints: defaults.$breakpoints
+) {
+    @media (map.get($breakpoints, $minbreakpoint) <= width <= map.get($breakpoints, $maxbreakpoint)) {
+        @content;
+    }
 }

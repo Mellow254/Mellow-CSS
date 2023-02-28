@@ -2,13 +2,14 @@
 @use 'sass:map';
 @use 'sass:math';
 @use 'sass:string';
+@use 'sass:meta';
 
 // Retrieves the color names from the color map
-@function get-colornames-from-map($colors, $theme) {
+@function get-colornames-from-map($colors-map, $theme) {
     $keys-list: ();
 
-    @each $key, $shades in map.get($colors, $theme) {
-        $keys-list: list.append($keys-list, $key);
+    @each $color-name, $colors in map.get($colors-map, $theme) {
+        $keys-list: list.append($keys-list, $color-name);
     }
 
     @return $keys-list;
@@ -34,10 +35,14 @@
     @return $string;
 }
 
-@function calculate-sizes-from-range($start: 0.5, $end: 10, $scale: 0.5) {
+@function calculate-sizes-from-range($args) {
+    $start: map.get($args, 'start');
+    $end: map.get($args, 'end');
+    $scale: map.get($args, 'scale');
+
     $values: ($start);
 
-    @for $i from 1 through math.ceil($end) - 1 {
+    @for $i from 1 through math.ceil(calc($end / $scale)) - 1 {
         $prev-value: list.nth($values, $i);
         $current-value: $prev-value + $scale;
         $values: list.append($values, $current-value);

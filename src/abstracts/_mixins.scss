@@ -4,25 +4,24 @@
 @use 'sass:math';
 
 @use 'functions';
+@use 'variables';
 @use '../base';
+@use '../defaults/flexbox';
 
 /*
-
-Generates the color variables with different shades of a color
-
+    Color Generetor
 */
-@mixin generate-color-variables($colors) {
-    @each $color, $nuance in $colors {
-        --dark-#{$color}: #{list.nth($nuance, 1)};
-        --#{$color}: #{list.nth($nuance, 2)};
-        --light-#{$color}: #{list.nth($nuance, 3)};
-        --on-#{$color}: #{list.nth($nuance, 4)};
+// Generates the color custom property and matches it to the specific color hex
+@mixin generate-color-variables($colors-map) {
+    @each $color-name, $colors in $colors-map {
+        --dark-#{$color-name}: #{list.nth($colors, 1)};
+        --#{$color-name}: #{list.nth($colors, 2)};
+        --light-#{$color-name}: #{list.nth($colors, 3)};
+        --on-#{$color-name}: #{list.nth($colors, 4)};
     }
 }
 
-/*
-Sets the colors for the current theme
-*/
+// Sets generated custom properties to the respective theme class
 @mixin set-themed-colors($colors-map, $current-theme) {
     @each $theme, $colors in $colors-map {
         @if $theme == $current-theme {
@@ -39,55 +38,47 @@ Sets the colors for the current theme
 }
 
 /*
-
-Sets the colors for the current theme
-
+    Color setter
 */
-@mixin color-setters($setters, $colornames) {
-    @each $setter-option in $setters {
-        @each $color in $colornames {
-            .#{$setter-option}-#{$color} {
-                --dark-#{$setter-option}: var(--dark-#{$color});
-                --#{$setter-option}: var(--#{$color});
-                --light-#{$setter-option}: var(--light-#{$color});
-                --on-#{$setter-option}: var(--on-#{$color});
+
+// Sets themed colors with passed setters by using previously generated custom properties
+@mixin set-colors-with-respective-custom-property($setters, $colornames) {
+    @each $setter in $setters {
+        @each $colorname in $colornames {
+            .#{$setter}-#{$colorname} {
+                --dark-#{$setter}: var(--dark-#{$colorname});
+                --#{$setter}: var(--#{$colorname});
+                --light-#{$setter}: var(--light-#{$colorname});
+                --on-#{$setter}: var(--on-#{$colorname});
             }
         }
     }
 }
 
 /*
-
-Color getters
-
+    Color getters
 */
-@mixin color-getters($getters, $shades, $setters) {
+@mixin get-color-for-each-colorname-nuance-getter($getters, $setters) {
     @each $getter, $value in $getters {
-        @each $shade in $shades {
-            @each $setter in $setters {
-                @if $shade == base {
-                    .#{$getter}-#{$setter} {
-                        #{$value}: var(--#{$setter});
-                    }
-                } @else if $shade == trans {
-                    .#{$getter}-on-#{$setter} {
-                        #{$value}: var(--on-#{$setter});
-                    }
-                } @else {
-                    .#{$getter}-#{$shade}-#{$setter} {
-                        #{$value}: var(--#{$shade}-#{$setter});
-                    }
-                }
+        @each $setter in $setters {
+            .#{$getter}-dark-#{$setter} {
+                #{map.get($getters, $getter)}: var(--#{dark}-#{$setter});
+            }
+
+            .#{$getter}-#{$setter} {
+                #{map.get($getters, $getter)}: var(--#{$setter});
+            }
+
+            .#{$getter}-light-#{$setter} {
+                #{map.get($getters, $getter)}: var(--#{light}-#{$setter});
+            }
+
+            .#{$getter}-on-#{$setter} {
+                #{map.get($getters, $getter)}: var(--#{on}-#{$setter});
             }
         }
     }
 }
-
-$descriptor-keys: (
-    1: 'font-family',
-    2: 'font-weight',
-    3: 'font-style',
-);
 
 /*
 
@@ -118,7 +109,7 @@ Generates the
             $value: string.slice($file, $slice-start-index, $i - 1);
             $descriptors: map.set(
                 $descriptors,
-                map.get($descriptor-keys, $descriptor-index),
+                map.get(variables.$descriptor-keys, $descriptor-index),
                 $value
             );
             $descriptor-index: $descriptor-index + 1;
@@ -175,76 +166,86 @@ Uses the Generate fonts fontface or remote link
 }
 
 /*
-
 Flexbox classes
-
 */
-@mixin generate-flexbox($properties) {
-    @each $property-type, $property-map in $properties {
-        @if $property-type == single {
-            @each $property, $values in $property-map {
-                @each $value in $values {
-                    $res: functions.replace-string($value, ' ', '-');
-                    .#{$property}-#{$res} {
-                        #{$property}: $value;
-                    }
+@mixin generate-basic-flexbox-options($classnames-map) {
+    @each $property, $options in flexbox.$properties {
+        @each $option in $options {
+            $classname: map.get($classnames-map, $property);
+            @if string.length($classname) > 1 {
+                .#{$classname}-#{$option} {
+                    #{$property}: #{$option};
                 }
-            }
-        } @else if $property-type == overflows {
-            $overflow-options: (safe, unsafe);
-            @each $property in $property-map {
-                $values: map.get(map.get($properties, single), $property);
-                @each $value in $values {
-                    $res: functions.replace-string($value, ' ', '-');
-                    @each $overflow-option in $overflow-options {
-                        .#{$overflow-option}-#{$property}-#{$res} {
-                            #{$property}: $overflow-option $value;
-                        }
-                    }
-                }
-            }
-        } @else {
-            @each $property, $constituent-properties in $property-map {
-                $prefixes: map.get(
-                    map.get($properties, single),
-                    map.get($constituent-properties, prefix)
-                );
-                $suffixes: map.get(
-                    map.get($properties, single),
-                    map.get($constituent-properties, suffix)
-                );
-                @each $prefix in $prefixes {
-                    @each $suffix in $suffixes {
-                        .#{$property}-#{$prefix}-#{$suffix} {
-                            #{$property}: $prefix $suffix;
-                        }
-                    }
+            } @else {
+                .#{$option} {
+                    #{$property}: #{$option};
                 }
             }
         }
     }
 }
 
+@mixin generate-flex-flow-options {
+    $direction-options: map.get(flexbox.$properties, 'flex-direction');
+    $wrap-options: map.get(flexbox.$properties, 'flex-wrap');
+
+    @each $direction in $direction-options {
+        @each $wrap in $wrap-options {
+            .flex-flow-#{$direction}-#{$wrap} {
+                flex-flow: #{$direction} #{$wrap};
+            }
+        }
+    }
+}
+
+@mixin generate-options-for-each-overflow-flex-property($options, $property) {
+    $overflow-options: (safe, unsafe);
+
+    @each $overflow-option in $overflow-options {
+        @each $option in $options {
+            $transformed-option: functions.replace-string($option, ' ', '-');
+            .#{$overflow-option}-#{$property}-#{$transformed-option} {
+                #{$property}: #{$overflow-option} #{$option};
+            }
+        }
+    }
+}
+
+@mixin generate-options-for-overflow-flex-properties {
+    $align-items-properties: map.get(flexbox.$properties, 'align-items');
+    $align-content-properties: map.get(flexbox.$properties, 'align-content');
+    $justify-content-properties: map.get(
+        flexbox.$properties,
+        'justify-content'
+    );
+
+    @include generate-options-for-each-overflow-flex-property(
+        $align-items-properties,
+        'align-items'
+    );
+    @include generate-options-for-each-overflow-flex-property(
+        $align-content-properties,
+        'align-content'
+    );
+    @include generate-options-for-each-overflow-flex-property(
+        $justify-content-properties,
+        'justify-content'
+    );
+}
+
 /*
-
     Flexible sizing custom properties not tied to any unit
-
 */
-
 @mixin root-spacing-values($sizes) {
     :root {
-        @for $i from 1 through list.length($sizes) {
-            $val: list.nth($sizes, $i);
-
-            --s-#{$i}: #{$val};
+        @each $value in $sizes {
+            --s-#{functions.replace-string($value, ".", "")}: #{$value};
         }
     }
 }
 
 /*
-
     Spacing setters -  Padding, Margin, Gap
-
 */
 
 @mixin spacing-setter($sizes, $setters, $breakpoint: null) {
@@ -279,7 +280,7 @@ Flexbox classes
 
 */
 
-@mixin spacing-getter($getters, $setters) {
+@mixin generate-spacing-getter($getters, $setters) {
     @each $getter, $value in $getters {
         @each $setter in $setters {
             .#{$getter} {
@@ -290,64 +291,120 @@ Flexbox classes
 }
 
 /*
-
-    Static layout and typography
-
+    Static layout
 */
-@mixin static-layout-typography($properties, $breakpoint: null) {
-    @each $property, $property-values in $properties {
-        $class: map.get($property-values, class);
-        $values: map.get($property-values, values);
 
-        @each $value in $values {
-            @if $breakpoint {
-                $value: #{$value}-#{$breakpoint};
-            }
-            .#{$class}-#{$value} {
-                #{$property}: $value;
+@mixin static-classes($properties, $classnames-map, $breakpoint: null) {
+    @each $property, $options in $properties {
+        $class-suffix: map.get($classnames-map, $property);
+
+        @if $breakpoint {
+            $class-suffix: #{$breakpoint}-#{$class-suffix};
+        }
+        @each $option in $options {
+            .#{$class-suffix}-#{$option} {
+                #{$property}: #{$option};
             }
         }
     }
 }
 
-@mixin generate-static-layout-typography($properties, $breakpoints: null) {
-    @if $breakpoints {
-        @each $key, $value in $breakpoints {
-            @include base.media-query($value) {
-                @include static-layout-typography($properties, $key);
-            }
+@mixin generate-static-layout-classes($classnames-map) {
+    @include static-classes(base.$layout-properties, $classnames-map);
+}
+
+@mixin generate-responsive-static-layout-classes(
+    $classnames-map,
+    $breakpoints
+) {
+    @each $key, $value in $breakpoints {
+        @include base.media-query($value) {
+            @include static-classes(
+                base.$layout-properties,
+                $classnames-map,
+                $key
+            );
         }
-    } @else {
-        @include static-layout-typography($properties);
     }
 }
 
 /*
-    Sizing typography
+
+    Static Typography
+
 */
 
-@mixin static-typography($properties, $sizes, $breakpoint: null) {
-    @each $class, $value in $properties {
-        @each $size in $sizes {
-            $class-suffix: functions.replace-string($size, '.', '');
-            @if $breakpoint {
-                $class-suffix: #{$class-suffix}-#{$breakpoint};
-            }
-            .#{$class}-#{$class-suffix} {
-                #{$value}: #{$size}em;
+@mixin generate-static-typography-classes($classnames-map) {
+    @include static-classes(base.$typography-properties, $classnames-map);
+}
+
+@mixin generate-responsive-static-typography-classes(
+    $classnames-map,
+    $breakpoints
+) {
+    @each $key, $value in $breakpoints {
+        @include base.media-query($value) {
+            @include static-classes(
+                base.$typography-properties,
+                $classnames-map,
+                $key
+            );
+        }
+    }
+}
+
+/*
+    Sized typography
+*/
+
+@mixin typography-from-range-of-values(
+    $properties,
+    $range-values,
+    $classnames-map,
+    $breakpoint: null
+) {
+    @each $property, $unit in $properties {
+        $class-prefix: map.get($classnames-map, $property);
+
+        @if $breakpoint {
+            $class-prefix: #{$breakpoint}-#{$class-prefix};
+        }
+
+        @each $value in $range-values {
+            $class-suffix: functions.replace-string($value, '.', '');
+            .#{$class-prefix}-#{$class-suffix} {
+                #{$property}: #{$value}#{$unit};
             }
         }
     }
 }
 
-@mixin generate-static-typography($properties, $sizes, $breakpoints: null) {
-    @if $breakpoints {
-        @each $key, $value in $breakpoints {
-            @include base.media-query($value) {
-                @include static-typography($properties, $sizes, $key);
-            }
+@mixin generate-typography-from-range-of-values(
+    $properties,
+    $range-values,
+    $classnames-map
+) {
+    @include typography-from-range-of-values(
+        $properties,
+        $range-values,
+        $classnames-map
+    );
+}
+
+@mixin generate-responsive-typography-from-range-of-values(
+    $properties,
+    $range-values,
+    $classnames-map,
+    $breakpoints
+) {
+    @each $key, $value in $breakpoints {
+        @include base.media-query($value) {
+            @include typography-from-range-of-values(
+                $properties,
+                $range-values,
+                $classnames-map,
+                $key
+            );
         }
-    } @else {
-        @include static-typography($properties, $sizes);
     }
 }

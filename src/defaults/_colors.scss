@@ -24,7 +24,11 @@ $options: (
         '#f3f1e9'],
     ),
 );
-$shades: (dark, base, light, trans);
+/*
+    Unused for now, but, the lib uses the below nuances in this order
+    TODO: Allow passing of dynamic nuances
+*/
+$nuances: (dark, base, light, trans);
 $setters: (x, y);
 $getters: (
     c: 'color',
