@@ -39,7 +39,6 @@
     $start: map.get($args, 'start');
     $end: map.get($args, 'end');
     $scale: map.get($args, 'scale');
-
     $values: ($start);
 
     @for $i from 1 through math.ceil(calc($end / $scale)) - 1 {

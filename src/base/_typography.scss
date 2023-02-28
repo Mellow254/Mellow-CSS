@@ -96,14 +96,12 @@ $properties: (
         break-word,
     ),
 );
-
 $sized-properties-and-units: (
     font-size: rem,
     letter-spacing: px,
     word-spacing: px,
     line-height: '',
 );
-
 $classnames-map: (
     // default rem
     font-size: fs,
