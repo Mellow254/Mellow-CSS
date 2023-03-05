@@ -1,3 +1,15 @@
+# [3.0.0](https://github.com/Mellow254/Mellow-CSS/compare/v2.0.0...v3.0.0) (2023-03-05)
+
+
+### Bug Fixes
+
+* remove fonts implementation ([45ea90c](https://github.com/Mellow254/Mellow-CSS/commit/45ea90cb8e514473220284e6df637c4b1b9f3efd))
+
+
+### BREAKING CHANGES
+
+* No fonts!
+
 # [2.0.0](https://github.com/Mellow254/Mellow-CSS/compare/v1.1.2...v2.0.0) (2023-02-28)
 
 
