@@ -16,12 +16,8 @@
     $breakpoints: $default-breakpoints,
     $layout-classnames-map: $layout-classnames-map,
     $typography-classnames-map: $typography-classnames-map,
-    $typography-properties: $typography-sized-properties-and-units,
-    $fonts: null
+    $typography-properties: $typography-sized-properties-and-units
 ) {
-    /* Fonts */
-    @include generate-fonts($fonts);
-
     /* Colors */
     @include set-themed-colors($colors, $theme);
 
