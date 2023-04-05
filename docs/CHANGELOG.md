@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/Mellow254/Mellow-CSS/compare/v3.0.0...v3.0.1) (2023-04-05)
+
+
+### Bug Fixes
+
+* remove the !important on resets ([9002886](https://github.com/Mellow254/Mellow-CSS/commit/90028862a90f74b114c1cc822e335299c87c85d6))
+
 # [3.0.0](https://github.com/Mellow254/Mellow-CSS/compare/v2.0.0...v3.0.0) (2023-03-05)
 
 
