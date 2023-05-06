@@ -1,3 +1,10 @@
+## [3.0.3](https://github.com/Mellow254/Mellow-CSS/compare/v3.0.2...v3.0.3) (2023-05-06)
+
+
+### Bug Fixes
+
+* remove a non existing export ([f342d27](https://github.com/Mellow254/Mellow-CSS/commit/f342d2737197532ff5e6c77e060f41f9e75a9b3b))
+
 ## [3.0.2](https://github.com/Mellow254/Mellow-CSS/compare/v3.0.1...v3.0.2) (2023-05-06)
 
 
