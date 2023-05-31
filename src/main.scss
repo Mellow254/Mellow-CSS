@@ -23,11 +23,13 @@
 
     @include set-colors-with-respective-custom-property(
         $color-setters,
-        get-colornames-from-map($colors, $theme)
+        get-colornames-and-shades-number($colors, $theme)
     );
+
     @include get-color-for-each-colorname-nuance-getter(
         $color-getters,
-        $color-setters
+        $color-setters,
+        get-max-number-of-shades($colors, $theme)
     );
 
     /* flexbox */

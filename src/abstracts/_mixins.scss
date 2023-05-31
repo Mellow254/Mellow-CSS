@@ -13,11 +13,16 @@
 */
 // Generates the color custom property and matches it to the specific color hex
 @mixin generate-color-variables($colors-map) {
-    @each $color-name, $colors in $colors-map {
-        --dark-#{$color-name}: #{list.nth($colors, 1)};
-        --#{$color-name}: #{list.nth($colors, 2)};
-        --light-#{$color-name}: #{list.nth($colors, 3)};
-        --on-#{$color-name}: #{list.nth($colors, 4)};
+    @each $color-name, $colors-hex-values in $colors-map {
+        $colors-hex-length: list.length($colors-hex-values);
+        @for $i from 1 through $colors-hex-length {
+            $shade-value: ($colors-hex-length - $i + 1) * 100;
+
+            --#{$color-name}-#{$shade-value}: #{list.nth(
+                    $colors-hex-values,
+                    $i
+                )};
+        }
     }
 }
 
@@ -42,14 +47,19 @@
 */
 
 // Sets themed colors with passed setters by using previously generated custom properties
-@mixin set-colors-with-respective-custom-property($setters, $colornames) {
+@mixin set-colors-with-respective-custom-property(
+    $setters,
+    $colornames-number-of-shades-map
+) {
     @each $setter in $setters {
-        @each $colorname in $colornames {
+        @each $colorname, $number-of-shades in $colornames-number-of-shades-map
+        {
             .#{$setter}-#{$colorname} {
-                --dark-#{$setter}: var(--dark-#{$colorname});
-                --#{$setter}: var(--#{$colorname});
-                --light-#{$setter}: var(--light-#{$colorname});
-                --on-#{$setter}: var(--on-#{$colorname});
+                @for $i from $number-of-shades through 1 {
+                    $sv: $i * 100;
+
+                    --#{$setter}-#{$sv}: var(--#{$colorname}-#{$sv});
+                }
             }
         }
     }
@@ -58,23 +68,19 @@
 /*
     Color getters
 */
-@mixin get-color-for-each-colorname-nuance-getter($getters, $setters) {
+@mixin get-color-for-each-colorname-nuance-getter(
+    $getters,
+    $setters,
+    $number-of-shades
+) {
     @each $getter, $value in $getters {
         @each $setter in $setters {
-            .#{$getter}-dark-#{$setter} {
-                #{map.get($getters, $getter)}: var(--#{dark}-#{$setter});
-            }
+            @for $i from $number-of-shades through 1 {
+                $sv: $i * 100;
 
-            .#{$getter}-#{$setter} {
-                #{map.get($getters, $getter)}: var(--#{$setter});
-            }
-
-            .#{$getter}-light-#{$setter} {
-                #{map.get($getters, $getter)}: var(--#{light}-#{$setter});
-            }
-
-            .#{$getter}-on-#{$setter} {
-                #{map.get($getters, $getter)}: var(--#{on}-#{$setter});
+                .#{$getter}-#{$setter}-#{$sv} {
+                    #{map.get($getters, $getter)}: var(--#{$setter}-#{$sv});
+                }
             }
         }
     }

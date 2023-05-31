@@ -5,14 +5,24 @@
 @use 'sass:meta';
 
 // Retrieves the color names from the color map
-@function get-colornames-from-map($colors-map, $theme) {
-    $keys-list: ();
+@function get-colornames-and-shades-number($colors-map, $theme) {
+    $keys-map: ();
 
     @each $color-name, $colors in map.get($colors-map, $theme) {
-        $keys-list: list.append($keys-list, $color-name);
+        $keys-map: map.set($keys-map, $color-name, list.length($colors));
     }
 
-    @return $keys-list;
+    @return $keys-map;
+}
+
+@function get-max-number-of-shades($colors-map, $theme) {
+    $max-shade: 0;
+
+    @each $color-name, $colors in map.get($colors-map, $theme) {
+        $max-shade: max($max-shade, list.length($colors));
+    }
+
+    @return $max-shade;
 }
 
 // Globally Replaces a string with another string
