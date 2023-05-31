@@ -1,3 +1,16 @@
+# [4.0.0](https://github.com/Mellow254/Mellow-CSS/compare/v3.0.3...v4.0.0) (2023-05-31)
+
+
+### Features
+
+* allow more than 4 color shades for your palette ([382faf5](https://github.com/Mellow254/Mellow-CSS/commit/382faf53ca513ddaff8032273815b0d389f4275f))
+
+
+### BREAKING CHANGES
+
+* The colors generated are nolonger light, dark, normal and transition color but can
+be identified with a shade value. i.e x-100, y-200 and so on
+
 ## [3.0.3](https://github.com/Mellow254/Mellow-CSS/compare/v3.0.2...v3.0.3) (2023-05-06)
 
 
