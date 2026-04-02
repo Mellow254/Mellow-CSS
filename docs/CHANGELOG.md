@@ -1,3 +1,10 @@
+# [4.1.0](https://github.com/Mellow254/Mellow-CSS/compare/v4.0.0...v4.1.0) (2026-04-02)
+
+
+### Features
+
+* consolidate base module into defaults, update packages, add docs and general arch improvements ([4b8c422](https://github.com/Mellow254/Mellow-CSS/commit/4b8c4220e1624c76e16b69e945a688c3414765d6))
+
 # [4.0.0](https://github.com/Mellow254/Mellow-CSS/compare/v3.0.3...v4.0.0) (2023-05-31)
 
 
