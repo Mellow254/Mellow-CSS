@@ -1,0 +1,77 @@
+$properties: (
+    display: (
+        grid,
+        inline-grid,
+    ),
+    grid-auto-flow: (
+        row,
+        column,
+        dense,
+        row dense,
+        column dense,
+    ),
+    justify-items: (
+        start,
+        end,
+        center,
+        stretch,
+    ),
+    align-items: (
+        start,
+        end,
+        center,
+        stretch,
+        baseline,
+    ),
+    justify-content: (
+        start,
+        end,
+        center,
+        stretch,
+        space-between,
+        space-around,
+        space-evenly,
+    ),
+    align-content: (
+        start,
+        end,
+        center,
+        stretch,
+        space-between,
+        space-around,
+        space-evenly,
+    ),
+    place-items: (
+        start,
+        end,
+        center,
+        stretch,
+    ),
+    justify-self: (
+        auto,
+        start,
+        end,
+        center,
+        stretch,
+    ),
+    align-self: (
+        auto,
+        start,
+        end,
+        center,
+        stretch,
+        baseline,
+    ),
+);
+$classnames-map: (
+    display: d,
+    grid-auto-flow: gaf,
+    justify-items: ji,
+    align-items: gai,
+    justify-content: gjc,
+    align-content: gac,
+    place-items: pi,
+    justify-self: js,
+    align-self: gas,
+);
+$column-count: 12 !default;

@@ -1,0 +1,629 @@
+@use 'true' as *;
+@use '../src/abstracts/mixins' as mx;
+
+// ==========================================================================
+// generate-color-variables [mixin]
+// ==========================================================================
+
+@include describe('generate-color-variables [mixin]') {
+    @include it('generates CSS custom properties for a single color with 2 shades') {
+        @include assert {
+            @include output {
+                @include mx.generate-color-variables(
+                    (
+                        'red': (
+                            #ff0000,
+                            #cc0000,
+                        ),
+                    )
+                );
+            }
+
+            @include expect {
+                --red-200: #ff0000;
+                --red-100: #cc0000;
+            }
+        }
+    }
+
+    @include it('generates custom properties for multiple colors') {
+        @include assert {
+            @include output {
+                @include mx.generate-color-variables(
+                    (
+                        'blue': (
+                            #0000ff,
+                        ),
+                        'green': (
+                            #00ff00,
+                        ),
+                    )
+                );
+            }
+
+            @include expect {
+                --blue-100: #0000ff;
+                --green-100: #00ff00;
+            }
+        }
+    }
+}
+
+// ==========================================================================
+// set-themed-colors [mixin]
+// ==========================================================================
+
+@include describe('set-themed-colors [mixin]') {
+    @include it('sets current theme on :root and theme class') {
+        @include assert {
+            @include output {
+                @include mx.set-themed-colors(
+                    (
+                        'light': (
+                            'red': (
+                                #ff0000,
+                            ),
+                        ),
+                        'dark': (
+                            'red': (
+                                #990000,
+                            ),
+                        ),
+                    ),
+                    'light'
+                );
+            }
+
+            @include expect {
+                :root,
+                .light {
+                    --red-100: #ff0000;
+                }
+
+                .dark {
+                    --red-100: #990000;
+                }
+            }
+        }
+    }
+}
+
+// ==========================================================================
+// spacing-setter [mixin]
+// ==========================================================================
+
+@include describe('spacing-setter [mixin]') {
+    @include it('generates spacing classes with custom properties') {
+        @include assert {
+            @include output {
+                @include mx.spacing-setter((1, 2), ('p',));
+            }
+
+            @include expect {
+                .p-1 {
+                    --p: 1rem;
+                }
+
+                .p-2 {
+                    --p: 2rem;
+                }
+            }
+        }
+    }
+
+    @include it('appends breakpoint suffix when provided') {
+        @include assert {
+            @include output {
+                @include mx.spacing-setter((1,), ('m',), 'md');
+            }
+
+            @include expect {
+                .m-1-md {
+                    --m: 1rem;
+                }
+            }
+        }
+    }
+
+    @include it('handles decimal values by removing dots from class names') {
+        @include assert {
+            @include output {
+                @include mx.spacing-setter((0.5,), ('p',));
+            }
+
+            @include expect {
+                .p-05 {
+                    --p: 0.5rem;
+                }
+            }
+        }
+    }
+
+    @include it('generates classes for multiple setters') {
+        @include assert {
+            @include output {
+                @include mx.spacing-setter((1,), ('a', 'b'));
+            }
+
+            @include expect {
+                .a-1 {
+                    --a: 1rem;
+                }
+
+                .b-1 {
+                    --b: 1rem;
+                }
+            }
+        }
+    }
+}
+
+// ==========================================================================
+// root-spacing-values [mixin]
+// ==========================================================================
+
+@include describe('root-spacing-values [mixin]') {
+    @include it('generates :root custom properties for spacing sizes') {
+        @include assert {
+            @include output {
+                @include mx.root-spacing-values((1, 2));
+            }
+
+            @include expect {
+                :root {
+                    --s-1: 1;
+                    --s-2: 2;
+                }
+            }
+        }
+    }
+
+    @include it('removes dots from decimal values in property names') {
+        @include assert {
+            @include output {
+                @include mx.root-spacing-values((0.25, 0.5));
+            }
+
+            @include expect {
+                :root {
+                    --s-025: 0.25;
+                    --s-05: 0.5;
+                }
+            }
+        }
+    }
+}
+
+// ==========================================================================
+// generate-spacing-getter [mixin]
+// ==========================================================================
+
+@include describe('generate-spacing-getter [mixin]') {
+    @include it('generates getter classes that use setter custom properties') {
+        @include assert {
+            @include output {
+                @include mx.generate-spacing-getter(
+                    (
+                        p: 'padding',
+                    ),
+                    ('a',)
+                );
+            }
+
+            @include expect {
+                .p {
+                    padding: var(--a);
+                }
+            }
+        }
+    }
+}
+
+// ==========================================================================
+// static-classes [mixin]
+// ==========================================================================
+
+@include describe('static-classes [mixin]') {
+    @include it('generates static utility classes from property map') {
+        @include assert {
+            @include output {
+                @include mx.static-classes(
+                    (
+                        display: (
+                            block,
+                            inline,
+                        ),
+                    ),
+                    (
+                        display: d,
+                    )
+                );
+            }
+
+            @include expect {
+                .d-block {
+                    display: block;
+                }
+
+                .d-inline {
+                    display: inline;
+                }
+            }
+        }
+    }
+
+    @include it('prepends breakpoint prefix when provided') {
+        @include assert {
+            @include output {
+                @include mx.static-classes(
+                    (
+                        position: (
+                            relative,
+                        ),
+                    ),
+                    (
+                        position: pos,
+                    ),
+                    'md'
+                );
+            }
+
+            @include expect {
+                .md-pos-relative {
+                    position: relative;
+                }
+            }
+        }
+    }
+}
+
+// ==========================================================================
+// generate-basic-flexbox-options [mixin]
+// ==========================================================================
+
+@include describe('generate-basic-flexbox-options [mixin]') {
+    @include it('generates flexbox utility classes with classname mapping') {
+        @include assert {
+            @include output {
+                @include mx.generate-basic-flexbox-options(
+                    (
+                        display: d,
+                        flex-direction: sd,
+                        flex-wrap: '',
+                        justify-content: jc,
+                        align-items: ai,
+                        align-content: ac,
+                        align-self: as,
+                    )
+                );
+            }
+
+            @include expect {
+                .flex {
+                    display: flex;
+                }
+
+                .inline-flex {
+                    display: inline-flex;
+                }
+
+                .sd-row {
+                    flex-direction: row;
+                }
+
+                .sd-row-reverse {
+                    flex-direction: row-reverse;
+                }
+
+                .sd-column {
+                    flex-direction: column;
+                }
+
+                .sd-column-reverse {
+                    flex-direction: column-reverse;
+                }
+
+                .nowrap {
+                    flex-wrap: nowrap;
+                }
+
+                .wrap {
+                    flex-wrap: wrap;
+                }
+
+                .wrap-reverse {
+                    flex-wrap: wrap-reverse;
+                }
+
+                .jc-flex-start {
+                    justify-content: flex-start;
+                }
+
+                .jc-flex-end {
+                    justify-content: flex-end;
+                }
+
+                .jc-center {
+                    justify-content: center;
+                }
+
+                .jc-space-between {
+                    justify-content: space-between;
+                }
+
+                .jc-space-around {
+                    justify-content: space-around;
+                }
+
+                .jc-space-evenly {
+                    justify-content: space-evenly;
+                }
+
+                .jc-start {
+                    justify-content: start;
+                }
+
+                .jc-end {
+                    justify-content: end;
+                }
+
+                .jc-left {
+                    justify-content: left;
+                }
+
+                .jc-right {
+                    justify-content: right;
+                }
+
+                .ai-stretch {
+                    align-items: stretch;
+                }
+
+                .ai-flex-start {
+                    align-items: flex-start;
+                }
+
+                .ai-flex-end {
+                    align-items: flex-end;
+                }
+
+                .ai-center {
+                    align-items: center;
+                }
+
+                .ai-baseline {
+                    align-items: baseline;
+                }
+
+                .ai-first-baseline {
+                    align-items: first baseline;
+                }
+
+                .ai-last-baseline {
+                    align-items: last baseline;
+                }
+
+                .ai-start {
+                    align-items: start;
+                }
+
+                .ai-end {
+                    align-items: end;
+                }
+
+                .ai-self-start {
+                    align-items: self-start;
+                }
+
+                .ai-self-end {
+                    align-items: self-end;
+                }
+
+                .ac-flex-start {
+                    align-content: flex-start;
+                }
+
+                .ac-flex-end {
+                    align-content: flex-end;
+                }
+
+                .ac-center {
+                    align-content: center;
+                }
+
+                .ac-space-between {
+                    align-content: space-between;
+                }
+
+                .ac-space-around {
+                    align-content: space-around;
+                }
+
+                .ac-space-evenly {
+                    align-content: space-evenly;
+                }
+
+                .ac-stretch {
+                    align-content: stretch;
+                }
+
+                .ac-start {
+                    align-content: start;
+                }
+
+                .ac-end {
+                    align-content: end;
+                }
+
+                .ac-baseline {
+                    align-content: baseline;
+                }
+
+                .ac-first-baseline {
+                    align-content: first baseline;
+                }
+
+                .ac-last-baseline {
+                    align-content: last baseline;
+                }
+
+                .as-auto {
+                    align-self: auto;
+                }
+
+                .as-flex-start {
+                    align-self: flex-start;
+                }
+
+                .as-flex-end {
+                    align-self: flex-end;
+                }
+
+                .as-center {
+                    align-self: center;
+                }
+
+                .as-baseline {
+                    align-self: baseline;
+                }
+
+                .as-stretch {
+                    align-self: stretch;
+                }
+            }
+        }
+    }
+}
+
+// ==========================================================================
+// set-colors-with-respective-custom-property [mixin]
+// ==========================================================================
+
+@include describe('set-colors-with-respective-custom-property [mixin]') {
+    @include it('creates setter classes linking to color custom properties') {
+        @include assert {
+            @include output {
+                @include mx.set-colors-with-respective-custom-property(
+                    ('x',),
+                    (
+                        'red': 2,
+                    )
+                );
+            }
+
+            @include expect {
+                .x-red {
+                    --x-200: var(--red-200);
+                    --x-100: var(--red-100);
+                }
+            }
+        }
+    }
+}
+
+// ==========================================================================
+// get-color-for-each-colorname-nuance-getter [mixin]
+// ==========================================================================
+
+@include describe('get-color-for-each-colorname-nuance-getter [mixin]') {
+    @include it('creates color getter classes') {
+        @include assert {
+            @include output {
+                @include mx.get-color-for-each-colorname-nuance-getter(
+                    (
+                        c: 'color',
+                    ),
+                    ('x',),
+                    2
+                );
+            }
+
+            @include expect {
+                .c-x-200 {
+                    color: var(--x-200);
+                }
+
+                .c-x-100 {
+                    color: var(--x-100);
+                }
+            }
+        }
+    }
+}
+
+// ==========================================================================
+// typography-from-range-of-values [mixin]
+// ==========================================================================
+
+@include describe('typography-from-range-of-values [mixin]') {
+    @include it('generates sized typography classes') {
+        @include assert {
+            @include output {
+                @include mx.typography-from-range-of-values(
+                    (
+                        font-size: rem,
+                    ),
+                    (1, 2),
+                    (
+                        font-size: fs,
+                    )
+                );
+            }
+
+            @include expect {
+                .fs-1 {
+                    font-size: 1rem;
+                }
+
+                .fs-2 {
+                    font-size: 2rem;
+                }
+            }
+        }
+    }
+
+    @include it('generates sized typography with breakpoint prefix') {
+        @include assert {
+            @include output {
+                @include mx.typography-from-range-of-values(
+                    (
+                        font-size: rem,
+                    ),
+                    (1,),
+                    (
+                        font-size: fs,
+                    ),
+                    'lg'
+                );
+            }
+
+            @include expect {
+                .lg-fs-1 {
+                    font-size: 1rem;
+                }
+            }
+        }
+    }
+
+    @include it('generates line-height without unit') {
+        @include assert {
+            @include output {
+                @include mx.typography-from-range-of-values(
+                    (
+                        line-height: '',
+                    ),
+                    (1.5,),
+                    (
+                        line-height: lh,
+                    )
+                );
+            }
+
+            @include expect {
+                .lh-15 {
+                    line-height: 1.5;
+                }
+            }
+        }
+    }
+}

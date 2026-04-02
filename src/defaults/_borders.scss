@@ -1,0 +1,51 @@
+// Item 5: Border utilities
+$properties: (
+    border-style: (
+        none,
+        solid,
+        dashed,
+        dotted,
+        double,
+        groove,
+        ridge,
+        inset,
+        outset,
+    ),
+    border-collapse: (
+        collapse,
+        separate,
+    ),
+);
+$classnames-map: (
+    border-style: bs,
+    border-collapse: bc,
+);
+
+// Border width values (in px)
+$width-properties: (
+    border-width: bw,
+    border-top-width: btw,
+    border-right-width: brw,
+    border-bottom-width: bbw,
+    border-left-width: blw,
+);
+$width-values: (0, 1, 2, 4, 8) !default;
+
+// Border radius values (in px)
+$radius-properties: (
+    border-radius: rounded,
+    border-top-left-radius: rounded-tl,
+    border-top-right-radius: rounded-tr,
+    border-bottom-right-radius: rounded-br,
+    border-bottom-left-radius: rounded-bl,
+);
+$radius-values: (0, 2, 4, 8, 12, 16, 9999) !default;
+$radius-labels: (
+    0: none,
+    2: sm,
+    4: '',
+    8: md,
+    12: lg,
+    16: xl,
+    9999: full,
+);

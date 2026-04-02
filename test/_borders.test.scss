@@ -1,0 +1,146 @@
+@use 'true' as *;
+@use '../src/abstracts/mixins' as mx;
+
+@include describe('generate-static-border-classes [mixin]') {
+    @include it('generates border-style classes') {
+        @include assert {
+            @include output {
+                @include mx.static-classes(
+                    (
+                        border-style: (
+                            none,
+                            solid,
+                            dashed,
+                        ),
+                    ),
+                    (
+                        border-style: bs,
+                    )
+                );
+            }
+
+            @include expect {
+                .bs-none {
+                    border-style: none;
+                }
+
+                .bs-solid {
+                    border-style: solid;
+                }
+
+                .bs-dashed {
+                    border-style: dashed;
+                }
+            }
+        }
+    }
+}
+
+@include describe('generate-border-width-classes [mixin]') {
+    @include it('generates border width classes in px') {
+        @include assert {
+            @include output {
+                @include mx.generate-border-width-classes(
+                    (
+                        border-width: bw,
+                    ),
+                    (0, 1, 2)
+                );
+            }
+
+            @include expect {
+                .bw-0 {
+                    border-width: 0px;
+                }
+
+                .bw-1 {
+                    border-width: 1px;
+                }
+
+                .bw-2 {
+                    border-width: 2px;
+                }
+            }
+        }
+    }
+
+    @include it('generates directional border width classes') {
+        @include assert {
+            @include output {
+                @include mx.generate-border-width-classes(
+                    (
+                        border-top-width: btw,
+                        border-bottom-width: bbw,
+                    ),
+                    (1,)
+                );
+            }
+
+            @include expect {
+                .btw-1 {
+                    border-top-width: 1px;
+                }
+
+                .bbw-1 {
+                    border-bottom-width: 1px;
+                }
+            }
+        }
+    }
+}
+
+@include describe('generate-border-radius-classes [mixin]') {
+    @include it('generates border radius classes with labels') {
+        @include assert {
+            @include output {
+                @include mx.generate-border-radius-classes(
+                    (
+                        border-radius: rounded,
+                    ),
+                    (0, 4, 9999),
+                    (
+                        0: none,
+                        4: '',
+                        9999: full,
+                    )
+                );
+            }
+
+            @include expect {
+                .rounded-none {
+                    border-radius: 0px;
+                }
+
+                .rounded {
+                    border-radius: 4px;
+                }
+
+                .rounded-full {
+                    border-radius: 9999px;
+                }
+            }
+        }
+    }
+
+    @include it('generates directional border radius classes') {
+        @include assert {
+            @include output {
+                @include mx.generate-border-radius-classes(
+                    (
+                        border-top-left-radius: rounded-tl,
+                    ),
+                    (8,),
+                    (
+                        8: md,
+                    )
+                );
+            }
+
+            @include expect {
+                .rounded-tl-md {
+                    border-top-left-radius: 8px;
+                }
+            }
+        }
+    }
+}

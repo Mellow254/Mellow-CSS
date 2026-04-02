@@ -1,4 +1,4 @@
-$setters: (a, b, u, v);
+$setters: (a, b, u, v) !default;
 $getters: (
     p: 'padding',
     pb: 'padding-bottom',
@@ -17,9 +17,9 @@ $getters: (
     gp: 'gap',
     rg: 'row-gap',
     cg: 'column-gap',
-);
+) !default;
 $determinants: (
     start: 0.25,
     end: 10,
     scale: 0.25,
-);
+) !default;

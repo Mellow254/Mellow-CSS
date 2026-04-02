@@ -1,0 +1,342 @@
+@use 'true' as *;
+@use '../src/abstracts/mixins' as mx;
+
+// ==========================================================================
+// generate-static-grid-classes [mixin]
+// ==========================================================================
+
+@include describe('static-classes with grid properties [mixin]') {
+    @include it('generates grid display and auto-flow classes via static-classes') {
+        @include assert {
+            @include output {
+                @include mx.static-classes(
+                    (
+                        display: (
+                            grid,
+                            inline-grid,
+                        ),
+                        grid-auto-flow: (
+                            row,
+                            column,
+                            dense,
+                            row dense,
+                            column dense,
+                        ),
+                    ),
+                    (
+                        display: d,
+                        grid-auto-flow: gaf,
+                    )
+                );
+            }
+
+            @include expect {
+                .d-grid {
+                    display: grid;
+                }
+
+                .d-inline-grid {
+                    display: inline-grid;
+                }
+
+                .gaf-row {
+                    grid-auto-flow: row;
+                }
+
+                .gaf-column {
+                    grid-auto-flow: column;
+                }
+
+                .gaf-dense {
+                    grid-auto-flow: dense;
+                }
+
+                .gaf-row-dense {
+                    grid-auto-flow: row dense;
+                }
+
+                .gaf-column-dense {
+                    grid-auto-flow: column dense;
+                }
+            }
+        }
+    }
+
+    @include it('generates grid alignment classes via static-classes') {
+        @include assert {
+            @include output {
+                @include mx.static-classes(
+                    (
+                        justify-items: (
+                            start,
+                            end,
+                            center,
+                            stretch,
+                        ),
+                    ),
+                    (
+                        justify-items: ji,
+                    )
+                );
+            }
+
+            @include expect {
+                .ji-start {
+                    justify-items: start;
+                }
+
+                .ji-end {
+                    justify-items: end;
+                }
+
+                .ji-center {
+                    justify-items: center;
+                }
+
+                .ji-stretch {
+                    justify-items: stretch;
+                }
+            }
+        }
+    }
+
+    @include it('generates responsive grid classes with breakpoint prefix') {
+        @include assert {
+            @include output {
+                @include mx.static-classes(
+                    (
+                        display: (
+                            grid,
+                        ),
+                    ),
+                    (
+                        display: d,
+                    ),
+                    'lg'
+                );
+            }
+
+            @include expect {
+                .lg-d-grid {
+                    display: grid;
+                }
+            }
+        }
+    }
+}
+
+// ==========================================================================
+// grid-template-columns [mixin]
+// ==========================================================================
+
+@include describe('grid-template-columns [mixin]') {
+    @include it('generates grid-template-columns classes up to column count') {
+        @include assert {
+            @include output {
+                @include mx.grid-template-columns(3);
+            }
+
+            @include expect {
+                .gtc-1 {
+                    grid-template-columns: repeat(1, minmax(0, 1fr));
+                }
+
+                .gtc-2 {
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                }
+
+                .gtc-3 {
+                    grid-template-columns: repeat(3, minmax(0, 1fr));
+                }
+            }
+        }
+    }
+
+    @include it('prepends breakpoint prefix when provided') {
+        @include assert {
+            @include output {
+                @include mx.grid-template-columns(2, 'md');
+            }
+
+            @include expect {
+                .md-gtc-1 {
+                    grid-template-columns: repeat(1, minmax(0, 1fr));
+                }
+
+                .md-gtc-2 {
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                }
+            }
+        }
+    }
+}
+
+// ==========================================================================
+// grid-template-rows [mixin]
+// ==========================================================================
+
+@include describe('grid-template-rows [mixin]') {
+    @include it('generates grid-template-rows classes') {
+        @include assert {
+            @include output {
+                @include mx.grid-template-rows(2);
+            }
+
+            @include expect {
+                .gtr-1 {
+                    grid-template-rows: repeat(1, minmax(0, 1fr));
+                }
+
+                .gtr-2 {
+                    grid-template-rows: repeat(2, minmax(0, 1fr));
+                }
+            }
+        }
+    }
+}
+
+// ==========================================================================
+// grid-column-span [mixin]
+// ==========================================================================
+
+@include describe('grid-column-span [mixin]') {
+    @include it('generates column span classes and full-width class') {
+        @include assert {
+            @include output {
+                @include mx.grid-column-span(2);
+            }
+
+            @include expect {
+                .gc-span-1 {
+                    grid-column: span 1 / span 1;
+                }
+
+                .gc-span-2 {
+                    grid-column: span 2 / span 2;
+                }
+
+                .gc-full {
+                    grid-column: 1 / -1;
+                }
+            }
+        }
+    }
+
+    @include it('generates responsive column span classes') {
+        @include assert {
+            @include output {
+                @include mx.grid-column-span(1, 'lg');
+            }
+
+            @include expect {
+                .lg-gc-span-1 {
+                    grid-column: span 1 / span 1;
+                }
+
+                .lg-gc-full {
+                    grid-column: 1 / -1;
+                }
+            }
+        }
+    }
+}
+
+// ==========================================================================
+// grid-column-start-end [mixin]
+// ==========================================================================
+
+@include describe('grid-column-start-end [mixin]') {
+    @include it('generates column start and end classes') {
+        @include assert {
+            @include output {
+                @include mx.grid-column-start-end(2);
+            }
+
+            @include expect {
+                .gc-start-1 {
+                    grid-column-start: 1;
+                }
+
+                .gc-end-1 {
+                    grid-column-end: 1;
+                }
+
+                .gc-start-2 {
+                    grid-column-start: 2;
+                }
+
+                .gc-end-2 {
+                    grid-column-end: 2;
+                }
+
+                .gc-start-3 {
+                    grid-column-start: 3;
+                }
+
+                .gc-end-3 {
+                    grid-column-end: 3;
+                }
+            }
+        }
+    }
+}
+
+// ==========================================================================
+// grid-row-span [mixin]
+// ==========================================================================
+
+@include describe('grid-row-span [mixin]') {
+    @include it('generates row span classes and full class') {
+        @include assert {
+            @include output {
+                @include mx.grid-row-span(2);
+            }
+
+            @include expect {
+                .gr-span-1 {
+                    grid-row: span 1 / span 1;
+                }
+
+                .gr-span-2 {
+                    grid-row: span 2 / span 2;
+                }
+
+                .gr-full {
+                    grid-row: 1 / -1;
+                }
+            }
+        }
+    }
+}
+
+// ==========================================================================
+// grid-row-start-end [mixin]
+// ==========================================================================
+
+@include describe('grid-row-start-end [mixin]') {
+    @include it('generates row start and end classes') {
+        @include assert {
+            @include output {
+                @include mx.grid-row-start-end(1);
+            }
+
+            @include expect {
+                .gr-start-1 {
+                    grid-row-start: 1;
+                }
+
+                .gr-end-1 {
+                    grid-row-end: 1;
+                }
+
+                .gr-start-2 {
+                    grid-row-start: 2;
+                }
+
+                .gr-end-2 {
+                    grid-row-end: 2;
+                }
+            }
+        }
+    }
+}

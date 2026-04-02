@@ -1,5 +1,4 @@
 @use 'sass:map';
-
 @use 'abstracts' as *;
 @use 'defaults' as *;
 @use 'base' as *;
@@ -16,31 +15,47 @@
     $breakpoints: $default-breakpoints,
     $layout-classnames-map: $layout-classnames-map,
     $typography-classnames-map: $typography-classnames-map,
-    $typography-properties: $typography-sized-properties-and-units
+    $typography-properties: $typography-sized-properties-and-units,
+    $grid-classnames-map: $default-grid-classnames-map,
+    $grid-column-count: $default-grid-column-count,
+    $sizing-classnames-map: $default-sizing-classnames-map,
+    $borders-classnames-map: $default-borders-classnames-map,
+    $borders-width-properties: $default-borders-width-properties,
+    $borders-width-values: $default-borders-width-values,
+    $borders-radius-properties: $default-borders-radius-properties,
+    $borders-radius-values: $default-borders-radius-values,
+    $borders-radius-labels: $default-borders-radius-labels,
+    $effects-opacity-values: $default-effects-opacity-values,
+    $effects-box-shadow-values: $default-effects-box-shadow-values,
+    $interactivity-classnames-map: $default-interactivity-classnames-map,
+    $transitions-classnames-map: $default-transitions-classnames-map,
+    $transitions-duration-values: $default-transitions-duration-values,
+    $transitions-delay-values: $default-transitions-delay-values
 ) {
     /* Colors */
     @include set-themed-colors($colors, $theme);
-
     @include set-colors-with-respective-custom-property(
         $color-setters,
         get-colornames-and-shades-number($colors, $theme)
     );
-
     @include get-color-for-each-colorname-nuance-getter(
         $color-getters,
         $color-setters,
         get-max-number-of-shades($colors, $theme)
     );
 
-    /* flexbox */
+    /* Flexbox */
     @include generate-basic-flexbox-options($flexbox-classnames-map);
     @include generate-flex-flow-options;
     @include generate-options-for-overflow-flex-properties;
+    @include generate-responsive-flexbox-options(
+        $flexbox-classnames-map,
+        $breakpoints
+    );
 
-    /**
-        Spacing variables without units
-    */
+    /* Spacing variables without units */
     $spacing-sizes-map: calculate-sizes-from-range($spacing-determinants);
+
     @include root-spacing-values($spacing-sizes-map);
     @include generate-spacing-setter($spacing-sizes-map, $spacing-setters);
 
@@ -52,39 +67,88 @@
     );
     @include generate-spacing-getter($spacing-getters, $spacing-setters);
 
-    /*
-        Static Layout classes
-    */
+    /* Negative margin setters */
+    @include generate-negative-spacing-setter(
+        $spacing-sizes-map,
+        $spacing-setters
+    );
+    @include generate-negative-spacing-setter(
+        $spacing-sizes-map,
+        $spacing-setters,
+        $breakpoints
+    );
+
+    /* Static Layout classes */
     @include generate-static-layout-classes($layout-classnames-map);
     @include generate-responsive-static-layout-classes(
         $layout-classnames-map,
         $breakpoints
     );
 
-    /*
-        Static Typography Classes
-    */
+    /* Static Typography Classes */
     @include generate-static-typography-classes($typography-classnames-map);
     @include generate-responsive-static-typography-classes(
         $typography-classnames-map,
         $breakpoints
     );
 
-    /*
-        Sized typography classes from range
-    */
+    /* Sized typography classes from range */
     @include generate-typography-from-range-of-values(
         $typography-properties,
         $spacing-sizes-map,
         $typography-classnames-map
     );
-
     @include generate-responsive-typography-from-range-of-values(
         $typography-properties,
         $spacing-sizes-map,
         $typography-classnames-map,
         $breakpoints
     );
+
+    /* Grid classes */
+    @include generate-static-grid-classes($grid-classnames-map);
+    @include generate-responsive-static-grid-classes(
+        $grid-classnames-map,
+        $breakpoints
+    );
+    @include generate-grid-template-classes($grid-column-count);
+    @include generate-responsive-grid-template-classes(
+        $grid-column-count,
+        $breakpoints
+    );
+
+    /* Sizing classes (width, height, min/max) */
+    @include generate-static-sizing-classes($sizing-classnames-map);
+    @include generate-responsive-static-sizing-classes(
+        $sizing-classnames-map,
+        $breakpoints
+    );
+
+    /* Border classes */
+    @include generate-static-border-classes($borders-classnames-map);
+    @include generate-border-width-classes(
+        $borders-width-properties,
+        $borders-width-values
+    );
+    @include generate-border-radius-classes(
+        $borders-radius-properties,
+        $borders-radius-values,
+        $borders-radius-labels
+    );
+
+    /* Effects classes (opacity, box-shadow) */
+    @include generate-opacity-classes($effects-opacity-values);
+    @include generate-box-shadow-classes($effects-box-shadow-values);
+
+    /* Interactivity classes */
+    @include generate-static-interactivity-classes(
+        $interactivity-classnames-map
+    );
+
+    /* Transition classes */
+    @include generate-static-transition-classes($transitions-classnames-map);
+    @include generate-transition-duration-classes($transitions-duration-values);
+    @include generate-transition-delay-classes($transitions-delay-values);
 }
 
 @include main;

@@ -1,0 +1,6 @@
+@use '../defaults/transitions';
+
+$properties: transitions.$properties;
+$classnames-map: transitions.$classnames-map;
+$duration-values: transitions.$duration-values;
+$delay-values: transitions.$delay-values;

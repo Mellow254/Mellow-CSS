@@ -1,5 +1,5 @@
 {
-    "extends": ["stylelint-config-standard-scss", "stylelint-config-prettier"],
+    "extends": ["stylelint-config-standard-scss"],
     "rules": {
         "scss/operator-no-newline-after": null,
         "no-invalid-position-at-import-rule": null,

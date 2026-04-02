@@ -1,0 +1,131 @@
+@use 'true' as *;
+@use '../src/abstracts/mixins' as mx;
+
+@include describe('static-classes with interactivity properties [mixin]') {
+    @include it('generates cursor classes') {
+        @include assert {
+            @include output {
+                @include mx.static-classes(
+                    (
+                        cursor: (
+                            auto,
+                            pointer,
+                            not-allowed,
+                        ),
+                    ),
+                    (
+                        cursor: cur,
+                    )
+                );
+            }
+
+            @include expect {
+                .cur-auto {
+                    cursor: auto;
+                }
+
+                .cur-pointer {
+                    cursor: pointer;
+                }
+
+                .cur-not-allowed {
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+
+    @include it('generates pointer-events classes') {
+        @include assert {
+            @include output {
+                @include mx.static-classes(
+                    (
+                        pointer-events: (
+                            none,
+                            auto,
+                        ),
+                    ),
+                    (
+                        pointer-events: pe,
+                    )
+                );
+            }
+
+            @include expect {
+                .pe-none {
+                    pointer-events: none;
+                }
+
+                .pe-auto {
+                    pointer-events: auto;
+                }
+            }
+        }
+    }
+
+    @include it('generates user-select classes') {
+        @include assert {
+            @include output {
+                @include mx.static-classes(
+                    (
+                        user-select: (
+                            none,
+                            text,
+                            all,
+                        ),
+                    ),
+                    (
+                        user-select: us,
+                    )
+                );
+            }
+
+            @include expect {
+                .us-none {
+                    user-select: none;
+                }
+
+                .us-text {
+                    user-select: text;
+                }
+
+                .us-all {
+                    user-select: all;
+                }
+            }
+        }
+    }
+
+    @include it('generates touch-action classes') {
+        @include assert {
+            @include output {
+                @include mx.static-classes(
+                    (
+                        touch-action: (
+                            auto,
+                            none,
+                            manipulation,
+                        ),
+                    ),
+                    (
+                        touch-action: touch,
+                    )
+                );
+            }
+
+            @include expect {
+                .touch-auto {
+                    touch-action: auto;
+                }
+
+                .touch-none {
+                    touch-action: none;
+                }
+
+                .touch-manipulation {
+                    touch-action: manipulation;
+                }
+            }
+        }
+    }
+}

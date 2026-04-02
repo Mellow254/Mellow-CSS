@@ -1,0 +1,9 @@
+@use '../defaults/borders';
+
+$properties: borders.$properties;
+$classnames-map: borders.$classnames-map;
+$width-properties: borders.$width-properties;
+$width-values: borders.$width-values;
+$radius-properties: borders.$radius-properties;
+$radius-values: borders.$radius-values;
+$radius-labels: borders.$radius-labels;

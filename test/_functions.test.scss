@@ -1,0 +1,165 @@
+@use 'sass:list';
+@use 'true' as *;
+@use '../src/abstracts/functions' as fn;
+
+// ==========================================================================
+// replace-string()
+// ==========================================================================
+
+@include describe('replace-string [function]') {
+    @include it('replaces a dot with empty string') {
+        $result: fn.replace-string('1.5', '.', '');
+        @include assert-equal($result, '15');
+    }
+
+    @include it('replaces a dot with a dash') {
+        $result: fn.replace-string('1.5', '.', '-');
+        @include assert-equal($result, '1-5');
+    }
+
+    @include it('replaces multiple occurrences') {
+        $result: fn.replace-string('a.b.c', '.', '-');
+        @include assert-equal($result, 'a-b-c');
+    }
+
+    @include it('returns original string when search not found') {
+        $result: fn.replace-string('hello', 'xyz');
+        @include assert-equal($result, 'hello');
+    }
+
+    @include it('removes substring when no replacement given') {
+        $result: fn.replace-string('hello-world', '-');
+        @include assert-equal($result, 'helloworld');
+    }
+}
+
+// ==========================================================================
+// calculate-sizes-from-range()
+// ==========================================================================
+
+@include describe('calculate-sizes-from-range [function]') {
+    @include it('generates sizes from 0.25 to 1 with scale 0.25') {
+        $args: (
+            'start': 0.25,
+            'end': 1,
+            'scale': 0.25,
+        );
+        $result: fn.calculate-sizes-from-range($args);
+        $expected: list.join((), (0.25, 0.5, 0.75, 1), $separator: space);
+        @include assert-equal($result, $expected);
+    }
+
+    @include it('generates sizes from 1 to 3 with scale 1') {
+        $args: (
+            'start': 1,
+            'end': 3,
+            'scale': 1,
+        );
+        $result: fn.calculate-sizes-from-range($args);
+        $expected: list.join((), (1, 2, 3), $separator: space);
+        @include assert-equal($result, $expected);
+    }
+
+    @include it('generates sizes from 0.5 to 2 with scale 0.5') {
+        $args: (
+            'start': 0.5,
+            'end': 2,
+            'scale': 0.5,
+        );
+        $result: fn.calculate-sizes-from-range($args);
+        $expected: list.join((), (0.5, 1, 1.5, 2), $separator: space);
+        @include assert-equal($result, $expected);
+    }
+}
+
+// ==========================================================================
+// get-colornames-and-shades-number()
+// ==========================================================================
+
+@include describe('get-colornames-and-shades-number [function]') {
+    @include it('returns map of color names to shade counts') {
+        $colors-map: (
+            'light': (
+                'red': (
+                    #ff0000,
+                    #ff3333,
+                    #ff6666,
+                ),
+                'blue': (
+                    #0000ff,
+                    #3333ff,
+                ),
+            ),
+        );
+        $result: fn.get-colornames-and-shades-number($colors-map, 'light');
+        $expected: (
+            'red': 3,
+            'blue': 2,
+        );
+        @include assert-equal($result, $expected);
+    }
+
+    @include it('handles a single color with one shade') {
+        $colors-map: (
+            'dark': (
+                'gray': (#999,),
+            ),
+        );
+        $result: fn.get-colornames-and-shades-number($colors-map, 'dark');
+        $expected: (
+            'gray': 1,
+        );
+        @include assert-equal($result, $expected);
+    }
+}
+
+// ==========================================================================
+// get-max-number-of-shades()
+// ==========================================================================
+
+@include describe('get-max-number-of-shades [function]') {
+    @include it('returns the max shade count across all colors') {
+        $colors-map: (
+            'light': (
+                'red': (
+                    #ff0000,
+                    #ff3333,
+                    #ff6666,
+                ),
+                'blue': (
+                    #0000ff,
+                    #3333ff,
+                ),
+            ),
+        );
+        $result: fn.get-max-number-of-shades($colors-map, 'light');
+        @include assert-equal($result, 3);
+    }
+
+    @include it('returns 1 when all colors have single shade') {
+        $colors-map: (
+            'light': (
+                'a': (#111,),
+                'b': (#222,),
+            ),
+        );
+        $result: fn.get-max-number-of-shades($colors-map, 'light');
+        @include assert-equal($result, 1);
+    }
+
+    @include it('handles five shades') {
+        $colors-map: (
+            'light': (
+                'primary': (
+                    #111,
+                    #222,
+                    #333,
+                    #444,
+                    #555,
+                ),
+            ),
+        );
+        $result: fn.get-max-number-of-shades($colors-map, 'light');
+        @include assert-equal($result, 5);
+    }
+}

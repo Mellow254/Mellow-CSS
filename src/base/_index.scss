@@ -1,3 +1,9 @@
 @forward 'layout' as layout-*;
 @forward 'typography' as typography-*;
+@forward 'grid' as grid-*;
+@forward 'sizing' as sizing-*;
+@forward 'borders' as borders-*;
+@forward 'effects' as effects-*;
+@forward 'interactivity' as interactivity-*;
+@forward 'transitions' as transitions-*;
 @forward 'mediaqueries';

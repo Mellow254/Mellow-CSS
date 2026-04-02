@@ -2,19 +2,20 @@
 @use 'sass:map';
 @use 'sass:string';
 @use 'sass:math';
-
 @use 'functions';
 @use 'variables';
 @use '../base';
 @use '../defaults/flexbox';
+@use '../defaults/grid';
 
 /*
-    Color Generetor
+    Color Generator
 */
 // Generates the color custom property and matches it to the specific color hex
 @mixin generate-color-variables($colors-map) {
     @each $color-name, $colors-hex-values in $colors-map {
         $colors-hex-length: list.length($colors-hex-values);
+
         @for $i from 1 through $colors-hex-length {
             $shade-value: ($colors-hex-length - $i + 1) * 100;
 
@@ -93,12 +94,14 @@ Flexbox classes
     @each $property, $options in flexbox.$properties {
         @each $option in $options {
             $classname: map.get($classnames-map, $property);
+            $class-option: functions.replace-string($option, ' ', '-');
+
             @if string.length($classname) > 1 {
-                .#{$classname}-#{$option} {
+                .#{$classname}-#{$class-option} {
                     #{$property}: #{$option};
                 }
             } @else {
-                .#{$option} {
+                .#{$class-option} {
                     #{$property}: #{$option};
                 }
             }
@@ -172,9 +175,11 @@ Flexbox classes
 @mixin spacing-setter($sizes, $setters, $breakpoint: null) {
     @each $size in $sizes {
         $class-suffix: functions.replace-string($size, '.', '');
+
         @if $breakpoint {
             $class-suffix: #{$class-suffix}-#{$breakpoint};
         }
+
         @each $setter in $setters {
             .#{$setter}-#{$class-suffix} {
                 --#{$setter}: #{$size}rem;
@@ -222,8 +227,11 @@ Flexbox classes
         @if $breakpoint {
             $class-suffix: #{$breakpoint}-#{$class-suffix};
         }
+
         @each $option in $options {
-            .#{$class-suffix}-#{$option} {
+            $class-option: functions.sanitize-classname($option);
+
+            .#{$class-suffix}-#{$class-option} {
                 #{$property}: #{$option};
             }
         }
@@ -326,6 +334,340 @@ Flexbox classes
                 $classnames-map,
                 $key
             );
+        }
+    }
+}
+
+/*
+    Grid classes
+*/
+
+@mixin generate-static-grid-classes($classnames-map) {
+    @include static-classes(grid.$properties, $classnames-map);
+}
+
+@mixin generate-responsive-static-grid-classes($classnames-map, $breakpoints) {
+    @each $key, $value in $breakpoints {
+        @include base.media-query($value) {
+            @include static-classes(grid.$properties, $classnames-map, $key);
+        }
+    }
+}
+
+@mixin grid-template-columns($column-count, $breakpoint: null) {
+    @for $i from 1 through $column-count {
+        $class-prefix: 'gtc';
+
+        @if $breakpoint {
+            $class-prefix: #{$breakpoint}-#{$class-prefix};
+        }
+
+        .#{$class-prefix}-#{$i} {
+            grid-template-columns: repeat(#{$i}, minmax(0, 1fr));
+        }
+    }
+}
+
+@mixin grid-template-rows($column-count, $breakpoint: null) {
+    @for $i from 1 through $column-count {
+        $class-prefix: 'gtr';
+
+        @if $breakpoint {
+            $class-prefix: #{$breakpoint}-#{$class-prefix};
+        }
+
+        .#{$class-prefix}-#{$i} {
+            grid-template-rows: repeat(#{$i}, minmax(0, 1fr));
+        }
+    }
+}
+
+@mixin grid-column-span($column-count, $breakpoint: null) {
+    @for $i from 1 through $column-count {
+        $class-prefix: 'gc-span';
+
+        @if $breakpoint {
+            $class-prefix: #{$breakpoint}-#{$class-prefix};
+        }
+
+        .#{$class-prefix}-#{$i} {
+            grid-column: span #{$i} / span #{$i};
+        }
+    }
+
+    $full-prefix: 'gc-full';
+
+    @if $breakpoint {
+        $full-prefix: #{$breakpoint}-#{$full-prefix};
+    }
+
+    .#{$full-prefix} {
+        grid-column: 1 / -1;
+    }
+}
+
+@mixin grid-column-start-end($column-count, $breakpoint: null) {
+    @for $i from 1 through ($column-count + 1) {
+        $start-prefix: 'gc-start';
+        $end-prefix: 'gc-end';
+
+        @if $breakpoint {
+            $start-prefix: #{$breakpoint}-#{$start-prefix};
+            $end-prefix: #{$breakpoint}-#{$end-prefix};
+        }
+
+        .#{$start-prefix}-#{$i} {
+            grid-column-start: #{$i};
+        }
+
+        .#{$end-prefix}-#{$i} {
+            grid-column-end: #{$i};
+        }
+    }
+}
+
+@mixin grid-row-span($column-count, $breakpoint: null) {
+    @for $i from 1 through $column-count {
+        $class-prefix: 'gr-span';
+
+        @if $breakpoint {
+            $class-prefix: #{$breakpoint}-#{$class-prefix};
+        }
+
+        .#{$class-prefix}-#{$i} {
+            grid-row: span #{$i} / span #{$i};
+        }
+    }
+
+    $full-prefix: 'gr-full';
+
+    @if $breakpoint {
+        $full-prefix: #{$breakpoint}-#{$full-prefix};
+    }
+
+    .#{$full-prefix} {
+        grid-row: 1 / -1;
+    }
+}
+
+@mixin grid-row-start-end($column-count, $breakpoint: null) {
+    @for $i from 1 through ($column-count + 1) {
+        $start-prefix: 'gr-start';
+        $end-prefix: 'gr-end';
+
+        @if $breakpoint {
+            $start-prefix: #{$breakpoint}-#{$start-prefix};
+            $end-prefix: #{$breakpoint}-#{$end-prefix};
+        }
+
+        .#{$start-prefix}-#{$i} {
+            grid-row-start: #{$i};
+        }
+
+        .#{$end-prefix}-#{$i} {
+            grid-row-end: #{$i};
+        }
+    }
+}
+
+@mixin generate-grid-template-classes($column-count) {
+    @include grid-template-columns($column-count);
+    @include grid-template-rows($column-count);
+    @include grid-column-span($column-count);
+    @include grid-column-start-end($column-count);
+    @include grid-row-span($column-count);
+    @include grid-row-start-end($column-count);
+}
+
+@mixin generate-responsive-grid-template-classes($column-count, $breakpoints) {
+    @each $key, $value in $breakpoints {
+        @include base.media-query($value) {
+            @include grid-template-columns($column-count, $key);
+            @include grid-template-rows($column-count, $key);
+            @include grid-column-span($column-count, $key);
+            @include grid-column-start-end($column-count, $key);
+            @include grid-row-span($column-count, $key);
+            @include grid-row-start-end($column-count, $key);
+        }
+    }
+}
+
+/*
+    Sizing classes (width, height, min/max)
+*/
+
+@mixin generate-static-sizing-classes($classnames-map) {
+    @include static-classes(base.$sizing-properties, $classnames-map);
+}
+
+@mixin generate-responsive-static-sizing-classes(
+    $classnames-map,
+    $breakpoints
+) {
+    @each $key, $value in $breakpoints {
+        @include base.media-query($value) {
+            @include static-classes(
+                base.$sizing-properties,
+                $classnames-map,
+                $key
+            );
+        }
+    }
+}
+
+/*
+    Border classes
+*/
+
+@mixin generate-static-border-classes($classnames-map) {
+    @include static-classes(base.$borders-properties, $classnames-map);
+}
+
+@mixin generate-border-width-classes($width-properties, $width-values) {
+    @each $property, $classname in $width-properties {
+        @each $value in $width-values {
+            .#{$classname}-#{$value} {
+                #{$property}: #{$value}px;
+            }
+        }
+    }
+}
+
+@mixin generate-border-radius-classes(
+    $radius-properties,
+    $radius-values,
+    $radius-labels
+) {
+    @each $property, $classname in $radius-properties {
+        @each $value in $radius-values {
+            $label: map.get($radius-labels, $value);
+
+            @if $label == '' {
+                .#{$classname} {
+                    #{$property}: #{$value}px;
+                }
+            } @else {
+                .#{$classname}-#{$label} {
+                    #{$property}: #{$value}px;
+                }
+            }
+        }
+    }
+}
+
+/*
+    Effects classes (opacity, box-shadow)
+*/
+
+@mixin generate-opacity-classes($opacity-values) {
+    @each $value in $opacity-values {
+        .opacity-#{$value} {
+            opacity: math.div($value, 100);
+        }
+    }
+}
+
+@mixin generate-box-shadow-classes($shadow-values) {
+    @each $name, $value in $shadow-values {
+        @if $name == '' {
+            .shadow {
+                box-shadow: #{$value};
+            }
+        } @else {
+            .shadow-#{$name} {
+                box-shadow: #{$value};
+            }
+        }
+    }
+}
+
+/*
+    Interactivity classes
+*/
+
+@mixin generate-static-interactivity-classes($classnames-map) {
+    @include static-classes(base.$interactivity-properties, $classnames-map);
+}
+
+/*
+    Transition classes
+*/
+
+@mixin generate-static-transition-classes($classnames-map) {
+    @include static-classes(base.$transitions-properties, $classnames-map);
+}
+
+@mixin generate-transition-duration-classes($duration-values) {
+    @each $value in $duration-values {
+        .duration-#{$value} {
+            transition-duration: #{$value}ms;
+        }
+    }
+}
+
+@mixin generate-transition-delay-classes($delay-values) {
+    @each $value in $delay-values {
+        .delay-#{$value} {
+            transition-delay: #{$value}ms;
+        }
+    }
+}
+
+/*
+    Negative margin classes (Item 10)
+*/
+
+@mixin negative-spacing-setter($sizes, $setters, $breakpoint: null) {
+    @each $size in $sizes {
+        $class-suffix: functions.replace-string($size, '.', '');
+
+        @if $breakpoint {
+            $class-suffix: #{$class-suffix}-#{$breakpoint};
+        }
+
+        @each $setter in $setters {
+            .-#{$setter}-#{$class-suffix} {
+                --#{$setter}: -#{$size}rem;
+            }
+        }
+    }
+}
+
+@mixin generate-negative-spacing-setter($sizes, $setters, $breakpoints: null) {
+    @if $breakpoints {
+        @each $key, $value in $breakpoints {
+            @include base.media-query($value) {
+                @include negative-spacing-setter($sizes, $setters, $key);
+            }
+        }
+    } @else {
+        @include negative-spacing-setter($sizes, $setters);
+    }
+}
+
+/*
+    Responsive flexbox (Item 7)
+*/
+
+@mixin generate-responsive-flexbox-options($classnames-map, $breakpoints) {
+    @each $key, $value in $breakpoints {
+        @include base.media-query($value) {
+            @each $property, $options in flexbox.$properties {
+                @each $option in $options {
+                    $classname: map.get($classnames-map, $property);
+                    $class-option: functions.replace-string($option, ' ', '-');
+
+                    @if string.length($classname) > 1 {
+                        .#{$key}-#{$classname}-#{$class-option} {
+                            #{$property}: #{$option};
+                        }
+                    } @else {
+                        .#{$key}-#{$class-option} {
+                            #{$property}: #{$option};
+                        }
+                    }
+                }
+            }
         }
     }
 }

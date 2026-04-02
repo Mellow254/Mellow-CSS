@@ -1,0 +1,29 @@
+@use 'true' as *;
+@use '../src/abstracts/functions' as fn;
+
+@include describe('sanitize-classname [function]') {
+    @include it('replaces spaces with dashes') {
+        $result: fn.sanitize-classname('row dense');
+        @include assert-equal($result, 'row-dense');
+    }
+
+    @include it('replaces percent with pct') {
+        $result: fn.sanitize-classname('50%');
+        @include assert-equal($result, '50pct');
+    }
+
+    @include it('removes dots') {
+        $result: fn.sanitize-classname('0.5');
+        @include assert-equal($result, '05');
+    }
+
+    @include it('handles combined special characters') {
+        $result: fn.sanitize-classname('1.5%');
+        @include assert-equal($result, '15pct');
+    }
+
+    @include it('returns clean strings unchanged') {
+        $result: fn.sanitize-classname('auto');
+        @include assert-equal($result, 'auto');
+    }
+}

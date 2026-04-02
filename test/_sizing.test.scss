@@ -1,0 +1,150 @@
+@use 'true' as *;
+@use '../src/abstracts/mixins' as mx;
+
+@include describe('static-classes with sizing properties [mixin]') {
+    @include it('generates width classes with percent values sanitized') {
+        @include assert {
+            @include output {
+                @include mx.static-classes(
+                    (
+                        width: (
+                            0,
+                            auto,
+                            50%,
+                            100%,
+                            100vw,
+                        ),
+                    ),
+                    (
+                        width: w,
+                    )
+                );
+            }
+
+            @include expect {
+                .w-0 {
+                    width: 0;
+                }
+
+                .w-auto {
+                    width: auto;
+                }
+
+                .w-50pct {
+                    width: 50%;
+                }
+
+                .w-100pct {
+                    width: 100%;
+                }
+
+                .w-100vw {
+                    width: 100vw;
+                }
+            }
+        }
+    }
+
+    @include it('generates height classes') {
+        @include assert {
+            @include output {
+                @include mx.static-classes(
+                    (
+                        height: (
+                            0,
+                            auto,
+                            100vh,
+                            100dvh,
+                        ),
+                    ),
+                    (
+                        height: h,
+                    )
+                );
+            }
+
+            @include expect {
+                .h-0 {
+                    height: 0;
+                }
+
+                .h-auto {
+                    height: auto;
+                }
+
+                .h-100vh {
+                    height: 100vh;
+                }
+
+                .h-100dvh {
+                    height: 100dvh;
+                }
+            }
+        }
+    }
+
+    @include it('generates min/max width classes') {
+        @include assert {
+            @include output {
+                @include mx.static-classes(
+                    (
+                        min-width: (
+                            0,
+                            100%,
+                        ),
+                        max-width: (
+                            none,
+                            100%,
+                        ),
+                    ),
+                    (
+                        min-width: min-w,
+                        max-width: max-w,
+                    )
+                );
+            }
+
+            @include expect {
+                .min-w-0 {
+                    min-width: 0;
+                }
+
+                .min-w-100pct {
+                    min-width: 100%;
+                }
+
+                .max-w-none {
+                    max-width: none;
+                }
+
+                .max-w-100pct {
+                    max-width: 100%;
+                }
+            }
+        }
+    }
+
+    @include it('generates responsive sizing classes') {
+        @include assert {
+            @include output {
+                @include mx.static-classes(
+                    (
+                        width: (
+                            100%,
+                        ),
+                    ),
+                    (
+                        width: w,
+                    ),
+                    'md'
+                );
+            }
+
+            @include expect {
+                .md-w-100pct {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

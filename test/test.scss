@@ -1,0 +1,14 @@
+@use 'true' as *;
+@use 'sanitize.test';
+@use 'functions.test';
+@use 'mixins.test';
+@use 'grid.test';
+@use 'sizing.test';
+@use 'borders.test';
+@use 'effects.test';
+@use 'interactivity.test';
+@use 'transitions.test';
+@use 'negative-spacing.test';
+@use 'responsive-flexbox.test';
+
+@include report;

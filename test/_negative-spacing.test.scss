@@ -1,0 +1,50 @@
+@use 'true' as *;
+@use '../src/abstracts/mixins' as mx;
+
+@include describe('negative-spacing-setter [mixin]') {
+    @include it('generates negative spacing classes') {
+        @include assert {
+            @include output {
+                @include mx.negative-spacing-setter((1, 2), ('m',));
+            }
+
+            @include expect {
+                .-m-1 {
+                    --m: -1rem;
+                }
+
+                .-m-2 {
+                    --m: -2rem;
+                }
+            }
+        }
+    }
+
+    @include it('handles decimal values') {
+        @include assert {
+            @include output {
+                @include mx.negative-spacing-setter((0.5,), ('a',));
+            }
+
+            @include expect {
+                .-a-05 {
+                    --a: -0.5rem;
+                }
+            }
+        }
+    }
+
+    @include it('appends breakpoint suffix when provided') {
+        @include assert {
+            @include output {
+                @include mx.negative-spacing-setter((1,), ('m',), 'md');
+            }
+
+            @include expect {
+                .-m-1-md {
+                    --m: -1rem;
+                }
+            }
+        }
+    }
+}

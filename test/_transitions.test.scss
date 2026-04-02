@@ -1,0 +1,118 @@
+@use 'true' as *;
+@use '../src/abstracts/mixins' as mx;
+
+@include describe('static-classes with transition properties [mixin]') {
+    @include it('generates transition-property classes') {
+        @include assert {
+            @include output {
+                @include mx.static-classes(
+                    (
+                        transition-property: (
+                            none,
+                            all,
+                            opacity,
+                        ),
+                    ),
+                    (
+                        transition-property: tp,
+                    )
+                );
+            }
+
+            @include expect {
+                .tp-none {
+                    transition-property: none;
+                }
+
+                .tp-all {
+                    transition-property: all;
+                }
+
+                .tp-opacity {
+                    transition-property: opacity;
+                }
+            }
+        }
+    }
+
+    @include it('generates timing function classes') {
+        @include assert {
+            @include output {
+                @include mx.static-classes(
+                    (
+                        transition-timing-function: (
+                            linear,
+                            ease,
+                            ease-in-out,
+                        ),
+                    ),
+                    (
+                        transition-timing-function: ease,
+                    )
+                );
+            }
+
+            @include expect {
+                .ease-linear {
+                    transition-timing-function: linear;
+                }
+
+                .ease-ease {
+                    transition-timing-function: ease;
+                }
+
+                .ease-ease-in-out {
+                    transition-timing-function: ease-in-out;
+                }
+            }
+        }
+    }
+}
+
+@include describe('generate-transition-duration-classes [mixin]') {
+    @include it('generates duration classes in ms') {
+        @include assert {
+            @include output {
+                @include mx.generate-transition-duration-classes((0, 150, 300));
+            }
+
+            @include expect {
+                .duration-0 {
+                    transition-duration: 0ms;
+                }
+
+                .duration-150 {
+                    transition-duration: 150ms;
+                }
+
+                .duration-300 {
+                    transition-duration: 300ms;
+                }
+            }
+        }
+    }
+}
+
+@include describe('generate-transition-delay-classes [mixin]') {
+    @include it('generates delay classes in ms') {
+        @include assert {
+            @include output {
+                @include mx.generate-transition-delay-classes((0, 100, 500));
+            }
+
+            @include expect {
+                .delay-0 {
+                    transition-delay: 0ms;
+                }
+
+                .delay-100 {
+                    transition-delay: 100ms;
+                }
+
+                .delay-500 {
+                    transition-delay: 500ms;
+                }
+            }
+        }
+    }
+}

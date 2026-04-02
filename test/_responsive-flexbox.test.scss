@@ -1,0 +1,222 @@
+@use 'true' as *;
+@use '../src/abstracts/mixins' as mx;
+@use '../src/base/mediaqueries';
+
+@include describe('generate-responsive-flexbox-options [mixin]') {
+    @include it('generates responsive flexbox classes with breakpoint prefix') {
+        @include assert {
+            @include output {
+                @include mx.generate-responsive-flexbox-options(
+                    (
+                        display: d,
+                        flex-direction: sd,
+                        flex-wrap: '',
+                        justify-content: jc,
+                        align-items: ai,
+                        align-content: ac,
+                        align-self: as,
+                    ),
+                    (
+                        'md': '768px',
+                    )
+                );
+            }
+
+            @include expect {
+                @media (min-width: 768px) {
+                    .md-flex {
+                        display: flex;
+                    }
+
+                    .md-inline-flex {
+                        display: inline-flex;
+                    }
+
+                    .md-sd-row {
+                        flex-direction: row;
+                    }
+
+                    .md-sd-row-reverse {
+                        flex-direction: row-reverse;
+                    }
+
+                    .md-sd-column {
+                        flex-direction: column;
+                    }
+
+                    .md-sd-column-reverse {
+                        flex-direction: column-reverse;
+                    }
+
+                    .md-nowrap {
+                        flex-wrap: nowrap;
+                    }
+
+                    .md-wrap {
+                        flex-wrap: wrap;
+                    }
+
+                    .md-wrap-reverse {
+                        flex-wrap: wrap-reverse;
+                    }
+
+                    .md-jc-flex-start {
+                        justify-content: flex-start;
+                    }
+
+                    .md-jc-flex-end {
+                        justify-content: flex-end;
+                    }
+
+                    .md-jc-center {
+                        justify-content: center;
+                    }
+
+                    .md-jc-space-between {
+                        justify-content: space-between;
+                    }
+
+                    .md-jc-space-around {
+                        justify-content: space-around;
+                    }
+
+                    .md-jc-space-evenly {
+                        justify-content: space-evenly;
+                    }
+
+                    .md-jc-start {
+                        justify-content: start;
+                    }
+
+                    .md-jc-end {
+                        justify-content: end;
+                    }
+
+                    .md-jc-left {
+                        justify-content: left;
+                    }
+
+                    .md-jc-right {
+                        justify-content: right;
+                    }
+
+                    .md-ai-stretch {
+                        align-items: stretch;
+                    }
+
+                    .md-ai-flex-start {
+                        align-items: flex-start;
+                    }
+
+                    .md-ai-flex-end {
+                        align-items: flex-end;
+                    }
+
+                    .md-ai-center {
+                        align-items: center;
+                    }
+
+                    .md-ai-baseline {
+                        align-items: baseline;
+                    }
+
+                    .md-ai-first-baseline {
+                        align-items: first baseline;
+                    }
+
+                    .md-ai-last-baseline {
+                        align-items: last baseline;
+                    }
+
+                    .md-ai-start {
+                        align-items: start;
+                    }
+
+                    .md-ai-end {
+                        align-items: end;
+                    }
+
+                    .md-ai-self-start {
+                        align-items: self-start;
+                    }
+
+                    .md-ai-self-end {
+                        align-items: self-end;
+                    }
+
+                    .md-ac-flex-start {
+                        align-content: flex-start;
+                    }
+
+                    .md-ac-flex-end {
+                        align-content: flex-end;
+                    }
+
+                    .md-ac-center {
+                        align-content: center;
+                    }
+
+                    .md-ac-space-between {
+                        align-content: space-between;
+                    }
+
+                    .md-ac-space-around {
+                        align-content: space-around;
+                    }
+
+                    .md-ac-space-evenly {
+                        align-content: space-evenly;
+                    }
+
+                    .md-ac-stretch {
+                        align-content: stretch;
+                    }
+
+                    .md-ac-start {
+                        align-content: start;
+                    }
+
+                    .md-ac-end {
+                        align-content: end;
+                    }
+
+                    .md-ac-baseline {
+                        align-content: baseline;
+                    }
+
+                    .md-ac-first-baseline {
+                        align-content: first baseline;
+                    }
+
+                    .md-ac-last-baseline {
+                        align-content: last baseline;
+                    }
+
+                    .md-as-auto {
+                        align-self: auto;
+                    }
+
+                    .md-as-flex-start {
+                        align-self: flex-start;
+                    }
+
+                    .md-as-flex-end {
+                        align-self: flex-end;
+                    }
+
+                    .md-as-center {
+                        align-self: center;
+                    }
+
+                    .md-as-baseline {
+                        align-self: baseline;
+                    }
+
+                    .md-as-stretch {
+                        align-self: stretch;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -45,6 +45,16 @@
     @return $string;
 }
 
+// Sanitizes a value for use in CSS class names
+// Removes or replaces special characters that are invalid in class selectors
+@function sanitize-classname($value) {
+    $result: replace-string($value, ' ', '-');
+    $result: replace-string($result, '%', 'pct');
+    $result: replace-string($result, '.', '');
+
+    @return $result;
+}
+
 @function calculate-sizes-from-range($args) {
     $start: map.get($args, 'start');
     $end: map.get($args, 'end');

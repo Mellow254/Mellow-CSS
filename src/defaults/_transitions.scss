@@ -1,0 +1,26 @@
+// Item 14: Transition and animation utilities
+$properties: (
+    transition-property: (
+        none,
+        all,
+        color,
+        background-color,
+        border-color,
+        opacity,
+        box-shadow,
+        transform,
+    ),
+    transition-timing-function: (
+        linear,
+        ease,
+        ease-in,
+        ease-out,
+        ease-in-out,
+    ),
+);
+$classnames-map: (
+    transition-property: tp,
+    transition-timing-function: ease,
+);
+$duration-values: (0, 75, 100, 150, 200, 300, 500, 700, 1000) !default;
+$delay-values: (0, 75, 100, 150, 200, 300, 500, 700, 1000) !default;
