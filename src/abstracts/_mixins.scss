@@ -4,9 +4,15 @@
 @use 'sass:math';
 @use 'functions';
 @use 'variables';
-@use '../base';
+@use 'mediaqueries';
 @use '../defaults/flexbox';
 @use '../defaults/grid';
+@use '../defaults/layout';
+@use '../defaults/typography';
+@use '../defaults/sizing';
+@use '../defaults/borders';
+@use '../defaults/interactivity';
+@use '../defaults/transitions';
 
 /*
     Color Generator
@@ -191,7 +197,7 @@ Flexbox classes
 @mixin generate-spacing-setter($sizes, $setters, $breakpoints: null) {
     @if $breakpoints {
         @each $key, $value in $breakpoints {
-            @include base.media-query($value) {
+            @include mediaqueries.media-query($value) {
                 @include spacing-setter($sizes, $setters, $key);
             }
         }
@@ -239,7 +245,7 @@ Flexbox classes
 }
 
 @mixin generate-static-layout-classes($classnames-map) {
-    @include static-classes(base.$layout-properties, $classnames-map);
+    @include static-classes(layout.$properties, $classnames-map);
 }
 
 @mixin generate-responsive-static-layout-classes(
@@ -247,12 +253,8 @@ Flexbox classes
     $breakpoints
 ) {
     @each $key, $value in $breakpoints {
-        @include base.media-query($value) {
-            @include static-classes(
-                base.$layout-properties,
-                $classnames-map,
-                $key
-            );
+        @include mediaqueries.media-query($value) {
+            @include static-classes(layout.$properties, $classnames-map, $key);
         }
     }
 }
@@ -264,7 +266,7 @@ Flexbox classes
 */
 
 @mixin generate-static-typography-classes($classnames-map) {
-    @include static-classes(base.$typography-properties, $classnames-map);
+    @include static-classes(typography.$properties, $classnames-map);
 }
 
 @mixin generate-responsive-static-typography-classes(
@@ -272,9 +274,9 @@ Flexbox classes
     $breakpoints
 ) {
     @each $key, $value in $breakpoints {
-        @include base.media-query($value) {
+        @include mediaqueries.media-query($value) {
             @include static-classes(
-                base.$typography-properties,
+                typography.$properties,
                 $classnames-map,
                 $key
             );
@@ -327,7 +329,7 @@ Flexbox classes
     $breakpoints
 ) {
     @each $key, $value in $breakpoints {
-        @include base.media-query($value) {
+        @include mediaqueries.media-query($value) {
             @include typography-from-range-of-values(
                 $properties,
                 $range-values,
@@ -348,7 +350,7 @@ Flexbox classes
 
 @mixin generate-responsive-static-grid-classes($classnames-map, $breakpoints) {
     @each $key, $value in $breakpoints {
-        @include base.media-query($value) {
+        @include mediaqueries.media-query($value) {
             @include static-classes(grid.$properties, $classnames-map, $key);
         }
     }
@@ -481,7 +483,7 @@ Flexbox classes
 
 @mixin generate-responsive-grid-template-classes($column-count, $breakpoints) {
     @each $key, $value in $breakpoints {
-        @include base.media-query($value) {
+        @include mediaqueries.media-query($value) {
             @include grid-template-columns($column-count, $key);
             @include grid-template-rows($column-count, $key);
             @include grid-column-span($column-count, $key);
@@ -497,7 +499,7 @@ Flexbox classes
 */
 
 @mixin generate-static-sizing-classes($classnames-map) {
-    @include static-classes(base.$sizing-properties, $classnames-map);
+    @include static-classes(sizing.$properties, $classnames-map);
 }
 
 @mixin generate-responsive-static-sizing-classes(
@@ -505,12 +507,8 @@ Flexbox classes
     $breakpoints
 ) {
     @each $key, $value in $breakpoints {
-        @include base.media-query($value) {
-            @include static-classes(
-                base.$sizing-properties,
-                $classnames-map,
-                $key
-            );
+        @include mediaqueries.media-query($value) {
+            @include static-classes(sizing.$properties, $classnames-map, $key);
         }
     }
 }
@@ -520,7 +518,7 @@ Flexbox classes
 */
 
 @mixin generate-static-border-classes($classnames-map) {
-    @include static-classes(base.$borders-properties, $classnames-map);
+    @include static-classes(borders.$properties, $classnames-map);
 }
 
 @mixin generate-border-width-classes($width-properties, $width-values) {
@@ -586,7 +584,7 @@ Flexbox classes
 */
 
 @mixin generate-static-interactivity-classes($classnames-map) {
-    @include static-classes(base.$interactivity-properties, $classnames-map);
+    @include static-classes(interactivity.$properties, $classnames-map);
 }
 
 /*
@@ -594,7 +592,7 @@ Flexbox classes
 */
 
 @mixin generate-static-transition-classes($classnames-map) {
-    @include static-classes(base.$transitions-properties, $classnames-map);
+    @include static-classes(transitions.$properties, $classnames-map);
 }
 
 @mixin generate-transition-duration-classes($duration-values) {
@@ -636,7 +634,7 @@ Flexbox classes
 @mixin generate-negative-spacing-setter($sizes, $setters, $breakpoints: null) {
     @if $breakpoints {
         @each $key, $value in $breakpoints {
-            @include base.media-query($value) {
+            @include mediaqueries.media-query($value) {
                 @include negative-spacing-setter($sizes, $setters, $key);
             }
         }
@@ -651,7 +649,7 @@ Flexbox classes
 
 @mixin generate-responsive-flexbox-options($classnames-map, $breakpoints) {
     @each $key, $value in $breakpoints {
-        @include base.media-query($value) {
+        @include mediaqueries.media-query($value) {
             @each $property, $options in flexbox.$properties {
                 @each $option in $options {
                     $classname: map.get($classnames-map, $property);

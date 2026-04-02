@@ -1,6 +1,0 @@
-@use 'sass:map';
-@use '../defaults/grid';
-
-$grid-properties: grid.$properties;
-$grid-classnames-map: grid.$classnames-map;
-$grid-column-count: grid.$column-count;

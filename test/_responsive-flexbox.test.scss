@@ -1,6 +1,6 @@
 @use 'true' as *;
 @use '../src/abstracts/mixins' as mx;
-@use '../src/base/mediaqueries';
+@use '../src/abstracts/mediaqueries';
 
 @include describe('generate-responsive-flexbox-options [mixin]') {
     @include it('generates responsive flexbox classes with breakpoint prefix') {

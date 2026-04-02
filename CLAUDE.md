@@ -7,9 +7,8 @@ Mellow CSS (`mellow-scss`) is a SASS-based utility CSS framework. Users configur
 ## Architecture
 
 - **Entry point:** `src/main.scss` — defines `@mixin main()` which orchestrates all class generation
-- **`src/abstracts/`** — Core mixins (`_mixins.scss`) and functions (`_functions.scss`)
-- **`src/base/`** — Re-exports from defaults with forwarding prefixes
-- **`src/defaults/`** — Default configuration values for each utility category
+- **`src/abstracts/`** — Core mixins (`_mixins.scss`), functions (`_functions.scss`), and media query mixins (`_mediaqueries.scss`)
+- **`src/defaults/`** — Default configuration values for each utility category (properties, classnames maps, value lists)
 - **`test/`** — sass-true unit tests (Jest runner)
 
 ### Utility categories
@@ -20,8 +19,8 @@ Mellow CSS (`mellow-scss`) is a SASS-based utility CSS framework. Users configur
 | Spacing | `_spacing.scss` | `generate-spacing-setter`, `generate-spacing-getter`, `generate-negative-spacing-setter` |
 | Flexbox | `_flexbox.scss` | `generate-basic-flexbox-options`, `generate-responsive-flexbox-options`, `generate-flex-flow-options` |
 | Grid | `_grid.scss` | `generate-static-grid-classes`, `generate-grid-template-classes` + responsive variants |
-| Layout | `_layout.scss` (base) | `generate-static-layout-classes` + responsive |
-| Typography | `_typography.scss` (base) | `generate-static-typography-classes`, `generate-typography-from-range-of-values` + responsive |
+| Layout | `_layout.scss` | `generate-static-layout-classes` + responsive |
+| Typography | `_typography.scss` | `generate-static-typography-classes`, `generate-typography-from-range-of-values` + responsive |
 | Sizing | `_sizing.scss` | `generate-static-sizing-classes` + responsive |
 | Borders | `_borders.scss` | `generate-static-border-classes`, `generate-border-width-classes`, `generate-border-radius-classes` |
 | Effects | `_effects.scss` | `generate-opacity-classes`, `generate-box-shadow-classes` |
@@ -32,7 +31,7 @@ Mellow CSS (`mellow-scss`) is a SASS-based utility CSS framework. Users configur
 
 - **`static-classes` mixin:** Shared generator for layout, typography, grid, sizing, borders, interactivity, transitions. Takes properties map + classnames map. Uses `sanitize-classname` to handle special chars.
 - **`sanitize-classname` function:** Converts spaces→dashes, `%`→`pct`, removes dots. Used by `static-classes` for safe CSS class names.
-- **Forwarding pattern:** `defaults/_index.scss` forwards with `default-*` prefix, `base/_index.scss` forwards with category prefix (e.g., `sizing-*`).
+- **Forwarding pattern:** `defaults/_index.scss` forwards with `default-*` prefix (e.g., `default-sizing-*`). All configuration flows directly from defaults into `main.scss`.
 
 ## Commands
 
@@ -62,10 +61,8 @@ npm run lint:fix      # Auto-fix formatting and lint issues
 ## Adding New Utility Categories
 
 1. Create `src/defaults/_newcategory.scss` with `$properties`, `$classnames-map`, and any value lists
-2. Create `src/base/_newcategory.scss` to re-export with clean variable names
-3. Update `src/defaults/_index.scss` (`@forward 'newcategory' as default-newcategory-*`)
-4. Update `src/base/_index.scss` (`@forward 'newcategory' as newcategory-*`)
-5. Add generation mixins in `src/abstracts/_mixins.scss` (use `static-classes` for enum-style properties)
-6. Wire into `src/main.scss` (add parameters + `@include` calls)
-7. Add tests in `test/_newcategory.test.scss` and include in `test/test.scss`
-8. Run `npm test` and `npm run build`
+2. Update `src/defaults/_index.scss` (`@forward 'newcategory' as default-newcategory-*`)
+3. Add generation mixins in `src/abstracts/_mixins.scss` (use `static-classes` for enum-style properties, import the defaults file directly)
+4. Wire into `src/main.scss` (add parameters + `@include` calls)
+5. Add tests in `test/_newcategory.test.scss` and include in `test/test.scss`
+6. Run `npm test` and `npm run build`

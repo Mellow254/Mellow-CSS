@@ -13,14 +13,14 @@
 
 @mixin mq-min-width(
     $default-breakpoint: xs,
-    $breakpoints: defaults.$breakpoints
+    $breakpoints: defaults.$default-breakpoints
 ) {
     @include media-query(map.get($breakpoints, $default-breakpoint));
 }
 
 @mixin mq-max-width(
     $default-breakpoint: xs,
-    $breakpoints: defaults.$breakpoints
+    $breakpoints: defaults.$default-breakpoints
 ) {
     @media (max-width: map.get($breakpoints, $default-breakpoint)) {
         @content;
@@ -30,7 +30,7 @@
 @mixin mq-range(
     $minbreakpoint,
     $maxbreakpoint,
-    $breakpoints: defaults.$breakpoints
+    $breakpoints: defaults.$default-breakpoints
 ) {
     @media (map.get($breakpoints, $minbreakpoint) <= width <= map.get($breakpoints, $maxbreakpoint)) {
         @content;

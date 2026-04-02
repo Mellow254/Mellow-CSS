@@ -1,7 +1,6 @@
 @use 'sass:map';
 @use 'abstracts' as *;
 @use 'defaults' as *;
-@use 'base' as *;
 
 @mixin main(
     $colors: $default-color-options,
@@ -13,9 +12,9 @@
     $spacing-setters: $default-spacing-setters,
     $spacing-getters: $default-spacing-getters,
     $breakpoints: $default-breakpoints,
-    $layout-classnames-map: $layout-classnames-map,
-    $typography-classnames-map: $typography-classnames-map,
-    $typography-properties: $typography-sized-properties-and-units,
+    $layout-classnames-map: $default-layout-classnames-map,
+    $typography-classnames-map: $default-typography-classnames-map,
+    $typography-properties: $default-typography-sized-properties-and-units,
     $grid-classnames-map: $default-grid-classnames-map,
     $grid-column-count: $default-grid-column-count,
     $sizing-classnames-map: $default-sizing-classnames-map,
